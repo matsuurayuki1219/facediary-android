@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FaceDiaryAndroidApp</string>
+    <string name="app_name">FaceDiary</string>
 
     <!-- common -->
     <string name="email">メールアドレス</string>
