@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="jp.matsuura.facediary.ui.splash.SplashFragment"
+        tools:layout="@layout/fragment_splash" >
+
+        <action
+            android:id="@+id/navigate_to_loginFragment"
+            app:destination="@id/signInFragment" />
+
+        <action
+            android:id="@+id/navigate_to_confirmRegisterFeelingFragment"
+            app:destination="@id/confirmRegisterFeelingFragment" />
+
+
+    </fragment>
+
+    <fragment 
+        android:id="@+id/signInFragment"
+        android:name="jp.matsuura.facediary.ui.signIn.SignInFragment"
+        tools:layout="@layout/fragment_singin" >
+
+        <action
+            android:id="@+id/navigate_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+
+        <action
+            android:id="@+id/navigate_to_passwordResetFragment"
+            app:destination="@+id/passwordResetFragment"/>
+
+        <action
+            android:id="@+id/navigate_to_confirmRegisterFeelingFragment"
+            app:destination="@+id/confirmRegisterFeelingFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="jp.matsuura.facediary.ui.signUp.SignUpFragment"
+        tools:layout="@layout/fragment_singup">
+
+        <action
+            android:id="@+id/navigate_to_confirmRegisterFeelingFragment"
+            app:destination="@+id/confirmRegisterFeelingFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/passwordResetFragment"
+        android:name="jp.matsuura.facediary.ui.password.PasswordResetFragment"
+        tools:layout="@layout/fragment_password_reset">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/passwordSettingFragment"
+        android:name="jp.matsuura.facediary.ui.password.PasswordSettingFragment"
+        tools:layout="@layout/fragment_password_setting">
+
+        <action
+            android:id="@+id/navigate_to_confirmRegisterFeelingFragment"
+            app:destination="@+id/confirmRegisterFeelingFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/confirmRegisterFeelingFragment"
+        android:name="jp.matsuura.facediary.ui.confirm.ConfirmRegisterFeelingFragment"
+        tools:layout="@layout/fragment_password_setting">
+
+        <action
+            android:id="@+id/navigate_to_registerFeelingFragment"
+            app:destination="@+id/registerFeelingFragment"/>
+
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFeelingFragment"
+        android:name="jp.matsuura.facediary.ui.register.RegisterFeelingFragment"
+        tools:layout="@layout/fragment_password_setting">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="jp.matsuura.facediary.ui.calendar.CalendarFragment"
+        tools:layout="@layout/fragment_home">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/timelineFragment"
+        android:name="jp.matsuura.facediary.ui.timeline.TimelineFragment"
+        tools:layout="@layout/fragment_home">
+
+    </fragment>
+
+
+</navigation>
