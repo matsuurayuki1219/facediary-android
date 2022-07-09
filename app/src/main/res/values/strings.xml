@@ -5,4 +5,10 @@
     <string name="email">メールアドレス</string>
     <string name="password">パスワード</string>
 
+    <!-- signIn -->
+    <string name="password_forget">パスワードを忘れた場合</string>
+    <string name="account_not_exist_message">アカウントを持っていない場合</string>
+    <string name="signup_button_text">登録はこちら</string>
+    <string name="signin_button">ログイン</string>
+
 </resources>
