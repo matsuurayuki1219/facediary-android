@@ -22,5 +22,20 @@ class SplashFragment: Fragment(R.layout.fragment_splash) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initObserver()
+    }
+
+    private fun initObserver() {
+        viewModel.event.onEach {
+            val directions = when (it) {
+                SplashViewModel.Event.IsLogin -> {
+                    SplashFragmentDirections.navigateToConfirmRegisterFeelingFragment()
+                }
+                SplashViewModel.Event.IsNotLogin -> {
+                    SplashFragmentDirections.navigateToSignInFragment()
+                }
+            }
+            findNavController().navigate(directions)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 }

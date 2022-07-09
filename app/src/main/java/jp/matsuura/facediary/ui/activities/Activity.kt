@@ -3,10 +3,10 @@ package jp.matsuura.facediary.ui.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import jp.matsuura.facediary.R
@@ -17,11 +17,12 @@ class Activity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBinding
 
+    private lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity)
         binding = ActivityBinding.inflate(layoutInflater)
-
+        setContentView(binding.root)
         initComponents()
     }
 
@@ -30,17 +31,32 @@ class Activity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         val navView: BottomNavigationView = binding.navBar
-        val navController: NavController = findNavController(R.id.nav_host_fragment)
+        // refer to: https://issuetracker.google.com/issues/142847973
+        val navHostFragment = supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
+        navController = navHostFragment.navController
         navView.setupWithNavController(navController)
 
-        val isBottomView = setOf(
-            R.id.calendar
+        val hasBottomViewIds = setOf(
+            R.id.calendarFragment,
+            R.id.timelineFragment,
         )
 
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        val hasToolBarIds = setOf(
+            R.id.calendarFragment,
+            R.id.timelineFragment,
+        )
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+
+            if (hasToolBarIds.contains(destination.id)) {
+                supportActionBar?.show()
+            } else {
+                supportActionBar?.hide()
+            }
+
+            binding.navBar.isVisible = hasBottomViewIds.contains(destination.id)
 
         }
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
