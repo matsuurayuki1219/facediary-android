@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">FaceDiaryAndroidApp</string>
+
+    <!-- common -->
+    <string name="email">メールアドレス</string>
+    <string name="password">パスワード</string>
+
 </resources>
