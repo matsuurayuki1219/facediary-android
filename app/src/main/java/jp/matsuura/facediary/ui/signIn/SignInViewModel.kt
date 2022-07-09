@@ -26,6 +26,7 @@ class SignInViewModel @Inject constructor(
     val event: SharedFlow<Event> = _event.asSharedFlow()
 
     fun onClickSignInButton(userId: String, password: String) {
+
         viewModelScope.launch {
             kotlin.runCatching {
                 _uiState.value = _uiState.value.copy(
@@ -63,6 +64,12 @@ class SignInViewModel @Inject constructor(
         }
     }
 
+    fun onClickForgetButton() {
+        viewModelScope.launch {
+            _event.emit(Event.ForgetPassword)
+        }
+    }
+
     fun onClickSignUpButton() {
         viewModelScope.launch {
             _event.emit(Event.SignUp)
@@ -75,10 +82,12 @@ class SignInViewModel @Inject constructor(
 
     sealed class Event {
         object CanSignIn: Event()
+        object ValidationError: Event()
         object WrongPassword: Event()
         object NotExistUser: Event()
         object UnknownError: Event()
         object NetworkError: Event()
+        object ForgetPassword: Event()
         object SignUp: Event()
     }
 }

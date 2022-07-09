@@ -1,7 +1,10 @@
 package jp.matsuura.facediary.ui.signIn
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -23,12 +26,22 @@ class SignInFragment: Fragment(R.layout.fragment_singin) {
 
     private val viewModel: SignInViewModel by viewModels()
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSinginBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentSinginBinding.inflate(layoutInflater)
         initListener()
+        initObserver()
         initHandler()
     }
+
     private fun initListener() {
 
         binding.singInButton.setOnClickListener {
@@ -40,6 +53,18 @@ class SignInFragment: Fragment(R.layout.fragment_singin) {
         binding.signUpButton.setOnClickListener {
             viewModel.onClickSignUpButton()
         }
+
+        binding.forgetPasswordButton.setOnClickListener {
+            viewModel.onClickForgetButton()
+        }
+    }
+
+    private fun initObserver() {
+
+        viewModel.uiState.onEach {
+            binding.progressBar.isVisible = it.isProgressVisible
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
     }
 
     private fun initHandler() {
@@ -63,6 +88,10 @@ class SignInFragment: Fragment(R.layout.fragment_singin) {
                 }
                 SignInViewModel.Event.SignUp -> {
                     val direction = SignInFragmentDirections.navigateToSignUpFragment()
+                    findNavController().navigate(direction)
+                }
+                SignInViewModel.Event.ForgetPassword -> {
+                    val direction = SignInFragmentDirections.navigateToPasswordResetFragment()
                     findNavController().navigate(direction)
                 }
             }
