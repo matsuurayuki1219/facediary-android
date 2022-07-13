@@ -46,8 +46,16 @@
         tools:layout="@layout/fragment_singup">
 
         <action
-            android:id="@+id/navigate_to_confirmRegisterFeelingFragment"
-            app:destination="@+id/confirmRegisterFeelingFragment"/>
+            android:id="@+id/navigate_to_signUpSuccessFragment"
+            app:destination="@+id/signUpSuccessFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/signUpSuccessFragment"
+        android:name="jp.matsuura.facediary.ui.signUp.SignUpSuccessFragment"
+        tools:layout="@layout/fragment_singup_success">
+
 
     </fragment>
 
