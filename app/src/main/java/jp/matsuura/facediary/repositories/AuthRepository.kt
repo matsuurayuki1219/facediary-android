@@ -32,4 +32,10 @@ class AuthRepository @Inject constructor(
         }
     }
 
+    suspend fun createUserAccount(userId: String, password: String): AuthResponse {
+        return withContext(Dispatchers.IO) {
+            api.createUser(userId = userId, password = password)
+        }
+    }
+
 }
