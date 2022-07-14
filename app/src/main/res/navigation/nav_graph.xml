@@ -64,6 +64,17 @@
         android:name="jp.matsuura.facediary.ui.password.PasswordResetFragment"
         tools:layout="@layout/fragment_password_reset">
 
+        <action
+            android:id="@+id/navigate_to_passwordResetSuccessFragment"
+            app:destination="@id/passwordResetSuccessFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/passwordResetSuccessFragment"
+        android:name="jp.matsuura.facediary.ui.password.PasswordResetSuccessFragment"
+        tools:layout="@layout/fragment_password_reset_success">
+
     </fragment>
 
     <fragment
@@ -80,7 +91,7 @@
     <fragment
         android:id="@+id/confirmRegisterFeelingFragment"
         android:name="jp.matsuura.facediary.ui.confirm.ConfirmRegisterFeelingFragment"
-        tools:layout="@layout/fragment_password_setting">
+        tools:layout="@layout/fragment_confirm_register_feeling">
 
         <action
             android:id="@+id/navigate_to_registerFeelingFragment"
@@ -92,7 +103,7 @@
     <fragment
         android:id="@+id/registerFeelingFragment"
         android:name="jp.matsuura.facediary.ui.register.RegisterFeelingFragment"
-        tools:layout="@layout/fragment_password_setting">
+        tools:layout="@layout/fragment_register_feeling">
 
     </fragment>
 

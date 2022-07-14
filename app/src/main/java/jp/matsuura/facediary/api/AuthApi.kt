@@ -12,4 +12,7 @@ interface AuthApi {
     @POST("/v1/auth/createUser")
     fun createUser(userId: String, password: String): AuthResponse
 
+    @GET("/v1/auth/resetPassword")
+    fun resetPassword(userId: String): AuthResponse
+
 }

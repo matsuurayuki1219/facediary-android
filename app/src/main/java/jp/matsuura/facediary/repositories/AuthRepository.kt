@@ -38,4 +38,10 @@ class AuthRepository @Inject constructor(
         }
     }
 
+    suspend fun resetPassword(userId: String): AuthResponse {
+        return withContext(Dispatchers.IO) {
+            api.resetPassword(userId = userId)
+        }
+    }
+
 }

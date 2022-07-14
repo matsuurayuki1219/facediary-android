@@ -4,6 +4,7 @@
     <!-- common -->
     <string name="email">メールアドレス</string>
     <string name="password">パスワード</string>
+    <string name="send">送信</string>
 
     <!-- signIn -->
     <string name="password_forget">パスワードを忘れた場合</string>
@@ -17,5 +18,10 @@
 
     <!-- signUpSuccess -->
     <string name="signup_success_message">まだ登録が完了していません。\nメールフォルダを確認し、\n登録手続きを完了させてください。</string>
+
+    <!-- password -->
+    <string name="password_reset_message">パスワードをリセットします。\nメールアドレスを入力してください。</string>
+    <string name="password_reset_success_message">メールフォルダを確認し、\nパスワード変更の手続きを行ってください。</string>
+    <string name="password_setting_message">設定するパスワードを入力してください。</string>
 
 </resources>
