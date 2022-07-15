@@ -38,6 +38,10 @@
             android:id="@+id/navigate_to_confirmRegisterFeelingFragment"
             app:destination="@+id/confirmRegisterFeelingFragment"/>
 
+        <action
+            android:id="@+id/navigate_to_calendarFragment"
+            app:destination="@+id/calendarFragment"/>
+
     </fragment>
 
     <fragment

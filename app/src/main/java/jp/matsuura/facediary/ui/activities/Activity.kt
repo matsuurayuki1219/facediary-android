@@ -30,7 +30,11 @@ class Activity : AppCompatActivity() {
         // Note that the Toolbar defined in the layout has the id "my_toolbar"
         setSupportActionBar(binding.toolbar)
 
+        binding.bottomBg.isVisible = false
+
         val navView: BottomNavigationView = binding.navBar
+        navView.menu.getItem(1).isEnabled = false
+
         // refer to: https://issuetracker.google.com/issues/142847973
         val navHostFragment = supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
         navController = navHostFragment.navController
@@ -50,8 +54,10 @@ class Activity : AppCompatActivity() {
 
             if (hasToolBarIds.contains(destination.id)) {
                 supportActionBar?.show()
+                binding.bottomBg.isVisible = true
             } else {
                 supportActionBar?.hide()
+                binding.bottomBg.isVisible = false
             }
 
             binding.navBar.isVisible = hasBottomViewIds.contains(destination.id)

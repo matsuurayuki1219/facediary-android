@@ -2,12 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/calendar"
+        android:id="@+id/calendarFragment"
         android:icon="@drawable/calendar"
         android:title="Calendar" />
 
     <item
-        android:id="@+id/timeline"
+        android:id="@+id/placeholder"
+        android:title="" />
+
+    <item
+        android:id="@+id/timelineFragment"
         android:icon="@drawable/timeline"
         android:title="Timeline" />
 
