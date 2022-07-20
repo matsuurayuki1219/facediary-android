@@ -40,7 +40,7 @@
 
         <action
             android:id="@+id/navigate_to_calendarFragment"
-            app:destination="@+id/calendarFragment"/>
+            app:destination="@+id/calendar_nav"/>
 
     </fragment>
 
@@ -111,12 +111,21 @@
 
     </fragment>
 
-    <fragment
-        android:id="@+id/calendarFragment"
-        android:name="jp.matsuura.facediary.ui.calendar.CalendarFragment"
-        tools:layout="@layout/fragment_home">
+    <navigation
+        android:id="@+id/calendar_nav"
+        app:startDestination="@id/calendarFragment">
 
-    </fragment>
+        <fragment
+            android:id="@+id/calendarFragment"
+            android:name="jp.matsuura.facediary.ui.calendar.CalendarFragment"
+            tools:layout="@layout/fragment_calendar"/>
+
+        <fragment
+            android:id="@+id/calendarDetailFragment"
+            android:name="jp.matsuura.facediary.ui.calendar.CalendarDetailFragment"
+            tools:layout="@layout/fragment_calendar_detail"/>
+
+    </navigation>
 
     <fragment
         android:id="@+id/timelineFragment"

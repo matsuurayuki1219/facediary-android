@@ -11,6 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import jp.matsuura.facediary.R
 import jp.matsuura.facediary.databinding.ActivityBinding
+import jp.matsuura.facediary.extenstions.showAlert
 
 @AndroidEntryPoint
 class Activity : AppCompatActivity() {
@@ -24,6 +25,7 @@ class Activity : AppCompatActivity() {
         binding = ActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initComponents()
+        initListener()
     }
 
     private fun initComponents() {
@@ -62,6 +64,25 @@ class Activity : AppCompatActivity() {
 
             binding.navBar.isVisible = hasBottomViewIds.contains(destination.id)
 
+        }
+    }
+
+    private fun initListener() {
+
+        binding.fab.setOnClickListener {
+            this.showAlert(
+                titleRes = R.string.dummy,
+                messageRes = R.string.dummy,
+                positiveButtonRes = R.string.dummy,
+                negativeButtonRes = R.string.dummy,
+                onPositiveClick = { alertDialog ->
+                    alertDialog.dismiss()
+                },
+                onNegativeClick = { alertDialog ->
+                    alertDialog.dismiss()
+                },
+                isCancel = false
+            )
         }
     }
 
