@@ -84,7 +84,9 @@ class SignInFragment: Fragment(R.layout.fragment_singin) {
 
                 }
                 SignInViewModel.Event.NetworkError -> {
-
+                    // For Demo
+                    val direction = SignInFragmentDirections.navigateToCalendarFragment()
+                    findNavController().navigate(direction)
                 }
                 SignInViewModel.Event.SignUp -> {
                     val direction = SignInFragmentDirections.navigateToSignUpFragment()

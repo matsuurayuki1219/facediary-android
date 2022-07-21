@@ -10,6 +10,7 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import jp.matsuura.facediary.R
 import jp.matsuura.facediary.databinding.FragmentCalendarBinding
@@ -50,6 +51,8 @@ class CalendarFragment: Fragment(R.layout.fragment_calendar) {
 
         adapter = CalendarAdapter(onItemClick = { day ->
             // show detail
+            val dialog = CalendarDetailFragment()
+            dialog.show(parentFragmentManager, dialog.tag)
         })
 
         binding.recycleView.adapter = adapter

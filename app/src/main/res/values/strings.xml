@@ -24,4 +24,7 @@
     <string name="password_reset_success_message">メールフォルダを確認し、\nパスワード変更の手続きを行ってください。</string>
     <string name="password_setting_message">設定するパスワードを入力してください。</string>
 
+    <!-- Dummy -->
+    <string name="dummy">テストです</string>
+
 </resources>
