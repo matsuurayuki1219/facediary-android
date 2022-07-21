@@ -44,11 +44,13 @@ class Activity : AppCompatActivity() {
 
         val hasBottomViewIds = setOf(
             R.id.calendarFragment,
+            R.id.calendarDetailFragment,
             R.id.timelineFragment,
         )
 
         val hasToolBarIds = setOf(
             R.id.calendarFragment,
+            R.id.calendarDetailFragment,
             R.id.timelineFragment,
         )
 

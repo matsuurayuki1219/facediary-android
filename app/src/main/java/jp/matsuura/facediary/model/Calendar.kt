@@ -12,7 +12,7 @@ data class Info(
     val day: String,
     val time: String,
     val emotion: Emotion,
-    val image: File,
+    val image: File?,
     val thought: String,
 )
 

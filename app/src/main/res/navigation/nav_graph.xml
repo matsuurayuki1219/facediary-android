@@ -118,12 +118,23 @@
         <fragment
             android:id="@+id/calendarFragment"
             android:name="jp.matsuura.facediary.ui.calendar.CalendarFragment"
-            tools:layout="@layout/fragment_calendar"/>
+            tools:layout="@layout/fragment_calendar">
 
-        <fragment
+            <action
+                android:id="@+id/navigate_to_calendarDetailFragment"
+                app:destination="@id/calendarDetailFragment" />
+        </fragment>
+
+        <dialog
             android:id="@+id/calendarDetailFragment"
             android:name="jp.matsuura.facediary.ui.calendar.CalendarDetailFragment"
-            tools:layout="@layout/fragment_calendar_detail"/>
+            tools:layout="@layout/fragment_calendar_detail">
+
+            <argument
+                android:name="day"
+                app:argType="integer"/>
+
+        </dialog>
 
     </navigation>
 
