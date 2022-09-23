@@ -17,14 +17,9 @@ import jp.matsuura.facediary.R
 import jp.matsuura.facediary.databinding.FragmentCalendarDetailBinding
 import kotlinx.coroutines.flow.onEach
 
-@AndroidEntryPoint
 class CalendarDetailFragment: BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentCalendarDetailBinding
-
-    private val viewModel by hiltNavGraphViewModels<CalendarViewModel>(R.id.calendar_nav)
-
-    private val args: CalendarDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,30 +39,15 @@ class CalendarDetailFragment: BottomSheetDialogFragment() {
     }
 
     private fun initComponents() {
-        viewModel.onDayButtonClicked(args.day.toString())
+
     }
 
     private fun initObserver() {
-        viewModel.detailUiState.onEach {
-            binding.time.text = it.detailInfo.day + " " + it.detailInfo.time
-            binding.thought.text = it.detailInfo.thought
-            binding.anger.progress = it.detailInfo.emotion.anger.toInt()
-            binding.contempt.progress = it.detailInfo.emotion.contempt.toInt()
-            binding.disgust.progress = it.detailInfo.emotion.disgust.toInt()
-            binding.happiness.progress = it.detailInfo.emotion.happiness.toInt()
-            binding.fear.progress = it.detailInfo.emotion.fear.toInt()
-            binding.neutral.progress = it.detailInfo.emotion.neutral.toInt()
-            binding.sadness.progress = it.detailInfo.emotion.sadness.toInt()
-            binding.surprise.progress = it.detailInfo.emotion.surprise.toInt()
-        }
+
     }
 
     private fun initHandler() {
-        viewModel.event.onEach {
-            when (it) {
-                CalendarViewModel.Event.NotExistData -> {}
-            }
-        }
+
     }
 
     override fun getTheme(): Int {

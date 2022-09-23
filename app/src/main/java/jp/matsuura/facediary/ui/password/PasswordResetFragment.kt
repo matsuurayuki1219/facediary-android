@@ -43,7 +43,7 @@ class PasswordResetFragment: Fragment(R.layout.fragment_password_reset) {
     private fun initListener() {
         binding.resetButton.setOnClickListener {
             viewModel.onClickResetButton(
-                userId = binding.userNameField.toString()
+                email = binding.userNameField.toString()
             )
         }
     }

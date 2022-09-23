@@ -3,23 +3,26 @@ package jp.matsuura.facediary.ui.calendar
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jp.matsuura.facediary.enums.Youbi
-import jp.matsuura.facediary.extenstions.dayValue
-import jp.matsuura.facediary.extenstions.monthValue
-import jp.matsuura.facediary.extenstions.yearValue
+import jp.matsuura.facediary.common.enum.Youbi
+import jp.matsuura.facediary.extenstion.dayValue
+import jp.matsuura.facediary.extenstion.monthValue
+import jp.matsuura.facediary.extenstion.yearValue
 import jp.matsuura.facediary.model.Calendar
 import jp.matsuura.facediary.model.Emotion
 import jp.matsuura.facediary.model.Info
+import jp.matsuura.facediary.repositories.AuthRepository
 import jp.matsuura.facediary.repositories.CalendarRepository
-import jp.matsuura.facediary.utils.CalendarUtil
+import jp.matsuura.facediary.common.util.CalendarUtil
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class CalendarViewModel @Inject constructor(
     private val calendarRepository: CalendarRepository,
+    private val authRepository: AuthRepository,
 ): ViewModel() {
 
     private var currentYear = Date().yearValue
@@ -150,6 +153,19 @@ class CalendarViewModel @Inject constructor(
         }
     }
 
+    fun logout() {
+        viewModelScope.launch {
+            kotlin.runCatching {
+                authRepository.logout()
+            }.onSuccess {
+                _event.emit(Event.Logout)
+            }.onFailure {
+                Timber.d(it)
+                _event.emit(Event.UnknownError)
+            }
+        }
+    }
+
     private fun createCalendarInfo() {
 
         val calendarList = mutableListOf<CalendarItem>()
@@ -220,6 +236,7 @@ class CalendarViewModel @Inject constructor(
         object UnknownError: Event()
         object NetworkError: Event()
         object NotExistData: Event()
+        object Logout: Event()
     }
 
     sealed class CalendarItem {

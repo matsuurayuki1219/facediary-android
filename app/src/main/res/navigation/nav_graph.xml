@@ -18,6 +18,10 @@
             android:id="@+id/navigate_to_confirmRegisterFeelingFragment"
             app:destination="@id/confirmRegisterFeelingFragment" />
 
+        <action
+            android:id="@+id/navigate_to_homeFragment"
+            app:destination="@id/homeFragment" />
+
 
     </fragment>
 
@@ -39,8 +43,8 @@
             app:destination="@+id/confirmRegisterFeelingFragment"/>
 
         <action
-            android:id="@+id/navigate_to_calendarFragment"
-            app:destination="@+id/calendar_nav"/>
+            android:id="@+id/navigate_to_homeFragment"
+            app:destination="@+id/homeFragment"/>
 
     </fragment>
 
@@ -111,39 +115,11 @@
 
     </fragment>
 
-    <navigation
-        android:id="@+id/calendar_nav"
-        app:startDestination="@id/calendarFragment">
-
-        <fragment
-            android:id="@+id/calendarFragment"
-            android:name="jp.matsuura.facediary.ui.calendar.CalendarFragment"
-            tools:layout="@layout/fragment_calendar">
-
-            <action
-                android:id="@+id/navigate_to_calendarDetailFragment"
-                app:destination="@id/calendarDetailFragment" />
-        </fragment>
-
-        <dialog
-            android:id="@+id/calendarDetailFragment"
-            android:name="jp.matsuura.facediary.ui.calendar.CalendarDetailFragment"
-            tools:layout="@layout/fragment_calendar_detail">
-
-            <argument
-                android:name="day"
-                app:argType="integer"/>
-
-        </dialog>
-
-    </navigation>
-
     <fragment
-        android:id="@+id/timelineFragment"
-        android:name="jp.matsuura.facediary.ui.timeline.TimelineFragment"
+        android:id="@+id/homeFragment"
+        android:name="jp.matsuura.facediary.ui.home.HomeFragment"
         tools:layout="@layout/fragment_home">
 
     </fragment>
-
 
 </navigation>

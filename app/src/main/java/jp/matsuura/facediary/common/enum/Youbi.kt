@@ -1,4 +1,4 @@
-package jp.matsuura.facediary.enums
+package jp.matsuura.facediary.common.enum
 
 enum class Youbi(val value: Int) {
     SUN(0),

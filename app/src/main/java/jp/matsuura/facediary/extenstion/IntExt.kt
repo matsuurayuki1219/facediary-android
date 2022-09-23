@@ -1,4 +1,4 @@
-package jp.matsuura.facediary.extenstions
+package jp.matsuura.facediary.extenstion
 
 import android.content.Context
 

@@ -4,16 +4,17 @@ plugins {
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     buildToolsVersion "31.0.0"
 
     defaultConfig {
         applicationId "jp.matsuura.facediary"
-        minSdkVersion 16
-        targetSdkVersion 31
+        minSdkVersion 24
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
 
@@ -78,4 +79,10 @@ dependencies {
 
     // ViewModel
     implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
+
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:30.3.2')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-dynamic-links'
+
 }

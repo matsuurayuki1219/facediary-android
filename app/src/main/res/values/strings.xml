@@ -5,6 +5,27 @@
     <string name="email">メールアドレス</string>
     <string name="password">パスワード</string>
     <string name="send">送信</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+    <string name="logout">ログアウト</string>
+    <string name="validation_email_error_title">メールアドレス不正</string>
+    <string name="validation_email_error_message">メールアドレスを正しい形式で入力してください。</string>
+    <string name="validation_password_error_title">パスワード不正</string>
+    <string name="validation_password_error_message">パスワードを正しい形式で入力してください。</string>
+    <string name="other_error_title">エラー</string>
+    <string name="other_error_message">エラーが発生しました。再度お試しください。</string>
+    <string name="network_error_title">通信エラー</string>
+    <string name="network_error_message">通信エラーが発生しました。再度お試しください。</string>
+    <string name="user_not_exist_error_title">ユーザが存在しません</string>
+    <string name="user_not_exist_error_message">該当するユーザは存在しません。入力したメールアドレスを再度ご確認ください。</string>
+    <string name="mail_not_verified_error_title">メール未検証</string>
+    <string name="mail_not_verified_error_message">メール検証がまだ完了しておりません。メールフォルダをチェックし、本登録を完了してください。</string>
+    <string name="user_already_existed_error_title">ユーザが既に存在しています</string>
+    <string name="user_already_existed_error_message">入力したメールアドレスは、既に登録済みです。</string>
+
+
+    <string name="password_error_title">パスワード不正</string>
+    <string name="password_error_message">パスワードが間違っております。入力したパスワードを再度ご確認ください。</string>
 
     <!-- signIn -->
     <string name="password_forget">パスワードを忘れた場合</string>

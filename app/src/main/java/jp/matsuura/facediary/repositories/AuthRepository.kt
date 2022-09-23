@@ -1,8 +1,11 @@
 package jp.matsuura.facediary.repositories
 
 import jp.matsuura.facediary.api.AuthApi
+import jp.matsuura.facediary.api.entity.ApiResponse
+import jp.matsuura.facediary.api.entity.AuthResponse
+import jp.matsuura.facediary.api.request.LoginRequest
 import jp.matsuura.facediary.datasource.FaceDiaryPreference
-import jp.matsuura.facediary.model.AuthResponse
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -14,10 +17,14 @@ class AuthRepository @Inject constructor(
     private val preference: FaceDiaryPreference,
 ) {
 
-    suspend fun login(userId: String, password: String): AuthResponse {
+    suspend fun login(email: String, password: String): AuthResponse {
         return withContext(Dispatchers.IO) {
-            api.login(userId = userId, password = password)
+            api.login(email = email, password = password)
         }
+    }
+
+    suspend fun logout() {
+        preference.clearAll()
     }
 
     suspend fun isLogin(): Boolean {
@@ -32,15 +39,36 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun createUserAccount(userId: String, password: String): AuthResponse {
+    suspend fun createUserAccount(email: String, password: String): ApiResponse {
         return withContext(Dispatchers.IO) {
-            api.createUser(userId = userId, password = password)
+            val body= LoginRequest(
+                email = email,
+                password = password,
+            )
+            api.createUser(body = body)
         }
     }
 
-    suspend fun resetPassword(userId: String): AuthResponse {
+    suspend fun verifyToken(verifyToken: String): AuthResponse {
         return withContext(Dispatchers.IO) {
-            api.resetPassword(userId = userId)
+            api.verifyToken(verifyToken = verifyToken)
+        }
+    }
+
+    suspend fun resetPassword(email: String): ApiResponse {
+        return withContext(Dispatchers.IO) {
+            api.resetPassword(email = email)
+        }
+    }
+
+    suspend fun changePassword(email: String, oldPassword: String, newPassword: String, passwordToken: String): ApiResponse {
+        return withContext(Dispatchers.IO) {
+            api.changePassword(
+                email = email,
+                oldPassword = oldPassword,
+                newPassword = newPassword,
+                passwordToken = passwordToken
+            )
         }
     }
 

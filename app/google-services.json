@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "81544617440",
+    "project_id": "facediary-9bd8e",
+    "storage_bucket": "facediary-9bd8e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81544617440:android:9cefe703b7760aea739f85",
+        "android_client_info": {
+          "package_name": "jp.matsuura.facediary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "81544617440-eb34sgtrm3gvpc9ifgj3nqibnk56sst5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "jp.matsuura.facediary",
+            "certificate_hash": "66e4d393b72cdf79a14b52c651a8e7517502e704"
+          }
+        },
+        {
+          "client_id": "81544617440-ko0dn8bguug3a9f4agc1fbs9rsbpt4g8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6EDd8GT2geVgA78F00Pk-kTTKdraws5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81544617440-ko0dn8bguug3a9f4agc1fbs9rsbpt4g8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

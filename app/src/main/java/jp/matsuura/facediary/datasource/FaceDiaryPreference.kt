@@ -24,4 +24,8 @@ class FaceDiaryPreference(context: Context) {
         get() {
             return preference.getString("accessToken", "") ?: ""
         }
+
+    fun clearAll() {
+        preference.edit().clear().commit()
+    }
 }

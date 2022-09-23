@@ -29,7 +29,7 @@ class SplashFragment: Fragment(R.layout.fragment_splash) {
         viewModel.event.onEach {
             val directions = when (it) {
                 SplashViewModel.Event.IsLogin -> {
-                    SplashFragmentDirections.navigateToConfirmRegisterFeelingFragment()
+                    SplashFragmentDirections.navigateToHomeFragment()
                 }
                 SplashViewModel.Event.IsNotLogin -> {
                     SplashFragmentDirections.navigateToSignInFragment()
