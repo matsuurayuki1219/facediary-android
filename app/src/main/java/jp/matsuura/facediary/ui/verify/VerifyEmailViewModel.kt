@@ -6,12 +6,16 @@ import androidx.lifecycle.viewModelScope
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
+import jp.matsuura.facediary.common.Response
 import jp.matsuura.facediary.data.api.entity.ErrorEntity
+import jp.matsuura.facediary.data.model.AuthModel
+import jp.matsuura.facediary.enums.VerifyEmailError
 import jp.matsuura.facediary.usecase.SaveAccessTokenUseCase
 import jp.matsuura.facediary.usecase.VerifyEmailTokenUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,42 +53,34 @@ class VerifyEmailViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(
                     isProgressVisible = false,
                 )
-                // save accessToken using Preference
-                saveAccessToken(accessToken = it.accessToken)
-                _event.emit(Event.Success)
+                handleResponse(response = it)
             }.onFailure {
                 _uiState.value = _uiState.value.copy(
                     isProgressVisible = false,
                 )
-                handleErrorResponse(throwable = it)
+                if (it is IOException) {
+                    _event.emit(Event.NetworkError)
+                } else {
+                    _event.emit(Event.UnknownError)
+                }
             }
         }
     }
 
-    private suspend fun handleErrorResponse(throwable: Throwable) {
-        if (throwable is HttpException) {
-            val errorJsonStr: String? = throwable.response()?.errorBody()?.string()
-            val adapter = Moshi.Builder().add(KotlinJsonAdapterFactory()).build().adapter(
-                ErrorEntity::class.java)
-            val errorResponse: ErrorEntity? = adapter.fromJson(errorJsonStr)
-
-            if (errorResponse == null) {
-                _event.emit(Event.UnknownError)
-                return
-            }
-
-            when (errorResponse.errorCode) {
-                "ES03_001" -> {
-                    _event.emit(Event.NotVerifyToken)
-                }
-                else -> {
-                    _event.emit(Event.UnknownError)
-                }
-            }
-
-        } else {
-            _event.emit(Event.NetworkError)
-        }
+    private suspend fun handleResponse(response: Response<AuthModel, VerifyEmailError>) {
+         when (response) {
+             is Response.Success -> {
+                 saveAccessToken(accessToken = response.value.accessToken)
+                 _event.emit(Event.Success)
+             }
+             is Response.Error -> {
+                 if (response.error == VerifyEmailError.NETWORK_ERROR) {
+                     _event.emit(Event.NetworkError)
+                 } else {
+                     _event.emit(Event.Failure(error = response.error))
+                 }
+             }
+         }
     }
 
     data class UiState(
@@ -93,7 +89,7 @@ class VerifyEmailViewModel @Inject constructor(
 
     sealed class Event {
         object Success: Event()
-        object NotVerifyToken: Event()
+        data class Failure(val error: VerifyEmailError): Event()
         object NetworkError: Event()
         object UnknownError: Event()
     }

@@ -58,7 +58,7 @@ class ChangePasswordFragment: Fragment(R.layout.fragment_change_password) {
     private fun initListener() {
         binding.changeButton.setOnClickListener {
             viewModel.onClickChangeButton(
-                password = binding.userNameField.toString()
+                password = binding.passwordEditTextView.text.toString()
             )
         }
     }
@@ -123,7 +123,7 @@ class ChangePasswordFragment: Fragment(R.layout.fragment_change_password) {
                         onPositiveClick = { dialog ->
                             dialog.dismiss()
                             viewModel.onClickChangeButton(
-                                password = binding.userNameField.toString()
+                                password = binding.passwordEditTextView.text.toString()
                             )
                         },
                         onNegativeClick = { dialog ->

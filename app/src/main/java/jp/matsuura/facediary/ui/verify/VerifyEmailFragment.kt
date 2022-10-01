@@ -16,6 +16,8 @@ import jp.matsuura.facediary.R
 import jp.matsuura.facediary.databinding.FragmentVerifyEmailBinding
 import jp.matsuura.facediary.common.extenstion.showConfirm
 import jp.matsuura.facediary.common.extenstion.showMessage
+import jp.matsuura.facediary.enums.VerifyEmailError
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -39,8 +41,12 @@ class VerifyEmailFragment: Fragment(R.layout.fragment_verify_email) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        handleUi()
-        handleEvent()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                handleUi(coroutineScope = this)
+                handleEvent(coroutineScope = this)
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -48,93 +54,85 @@ class VerifyEmailFragment: Fragment(R.layout.fragment_verify_email) {
         _binding = null
     }
 
-    private fun handleUi() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.onEach {
-                    binding.progressBar.isVisible = it.isProgressVisible
-                }.launchIn(this)
-            }
-        }
+    private fun handleUi(coroutineScope: CoroutineScope) {
+        viewModel.uiState.onEach {
+            binding.progressBar.isVisible = it.isProgressVisible
+        }.launchIn(coroutineScope)
     }
 
-    private fun handleEvent() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.event.onEach {
-                    when (it) {
-                        is VerifyEmailViewModel.Event.Success -> {
-                            showSuccessMessage()
+    private fun handleEvent(coroutineScope: CoroutineScope) {
+        viewModel.event.onEach {
+            when (it) {
+                is VerifyEmailViewModel.Event.Success -> {
+                    requireContext().showMessage(
+                        titleRes = R.string.verify_email_dialog_title_success,
+                        messageRes = R.string.dummy,
+                        positiveButtonRes = R.string.verify_email_dialog_message_success,
+                        onPositiveClick = { dialog ->
+                            dialog.dismiss()
+                            findNavController().navigate(VerifyEmailFragmentDirections.navigateToHomeFragment())
+                        },
+                        isCancel = false,
+                    )
+                }
+                is VerifyEmailViewModel.Event.Failure -> {
+                    when (it.error) {
+                        VerifyEmailError.MAIL_NOT_VERIFIED -> {
+                            requireContext().showMessage(
+                                titleRes = R.string.verify_email_dialog_title_not_verify_token,
+                                messageRes = R.string.verify_email_dialog_message_not_verify_token,
+                                positiveButtonRes = R.string.ok,
+                                onPositiveClick = { dialog ->
+                                    dialog.dismiss()
+                                    findNavController().popBackStack(R.id.signInFragment, false)
+                                },
+                                isCancel = false,
+                            )
                         }
-                        is VerifyEmailViewModel.Event.NotVerifyToken -> {
-                            showErrorMessage()
-                        }
-                        is VerifyEmailViewModel.Event.NetworkError -> {
-                            showNetworkErrorMessage()
-                        }
-                        is VerifyEmailViewModel.Event.UnknownError -> {
-                            showUnknownErrorMessage()
+                        else -> {
+                            requireContext().showMessage(
+                                titleRes = R.string.other_error_title,
+                                messageRes = R.string.other_error_message,
+                                positiveButtonRes = R.string.ok,
+                                onPositiveClick = { dialog ->
+                                    dialog.dismiss()
+                                    findNavController().popBackStack(R.id.signInFragment, false)
+                                },
+                                isCancel = false,
+                            )
                         }
                     }
-                }.launchIn(this)
+                }
+                is VerifyEmailViewModel.Event.NetworkError -> {
+                    requireContext().showConfirm(
+                        titleRes = R.string.network_error_title,
+                        messageRes = R.string.network_error_message,
+                        positiveButtonRes = R.string.retry,
+                        negativeButtonRes = R.string.cancel,
+                        onPositiveClick = { dialog ->
+                            dialog.dismiss()
+                            viewModel.checkVerifyToken()
+                        },
+                        onNegativeClick = { dialog ->
+                            dialog.dismiss()
+                        },
+                        isCancel = false,
+                    )
+                }
+                is VerifyEmailViewModel.Event.UnknownError -> {
+                    requireContext().showMessage(
+                        titleRes = R.string.other_error_title,
+                        messageRes = R.string.other_error_message,
+                        positiveButtonRes = R.string.ok,
+                        onPositiveClick = { dialog ->
+                            dialog.dismiss()
+                            findNavController().popBackStack(R.id.signInFragment, false)
+                        },
+                        isCancel = false,
+                    )
+                }
             }
-        }
-    }
-
-    private fun showSuccessMessage() {
-        requireContext().showMessage(
-            titleRes = R.string.dummy,
-            messageRes = R.string.dummy,
-            positiveButtonRes = R.string.dummy,
-            onPositiveClick = { dialog ->
-                dialog.dismiss()
-                findNavController().navigate(VerifyEmailFragmentDirections.navigateToHomeFragment())
-            },
-            isCancel = false,
-        )
-    }
-
-    private fun showErrorMessage() {
-        requireContext().showMessage(
-            titleRes = R.string.verify_email_dialog_title_not_verify_token,
-            messageRes = R.string.verify_email_dialog_message_not_verify_token,
-            positiveButtonRes = R.string.ok,
-            onPositiveClick = { dialog ->
-                dialog.dismiss()
-                findNavController().popBackStack(R.id.signInFragment, false)
-            },
-            isCancel = false,
-        )
-    }
-
-    private fun showUnknownErrorMessage() {
-        requireContext().showMessage(
-            titleRes = R.string.other_error_title,
-            messageRes = R.string.other_error_message,
-            positiveButtonRes = R.string.ok,
-            onPositiveClick = { dialog ->
-                dialog.dismiss()
-                findNavController().popBackStack(R.id.signInFragment, false)
-            },
-            isCancel = false,
-        )
-    }
-
-    private fun showNetworkErrorMessage() {
-        requireContext().showConfirm(
-            titleRes = R.string.network_error_title,
-            messageRes = R.string.network_error_message,
-            positiveButtonRes = R.string.retry,
-            negativeButtonRes = R.string.cancel,
-            onPositiveClick = { dialog ->
-                dialog.dismiss()
-                viewModel.checkVerifyToken()
-            },
-            onNegativeClick = { dialog ->
-                dialog.dismiss()
-            },
-            isCancel = false,
-        )
+        }.launchIn(coroutineScope)
     }
 
 }

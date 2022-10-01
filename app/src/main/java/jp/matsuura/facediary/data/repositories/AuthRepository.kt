@@ -11,10 +11,7 @@ import jp.matsuura.facediary.data.api.toModel
 import jp.matsuura.facediary.data.datasource.FaceDiaryPreference
 import jp.matsuura.facediary.data.model.AuthModel
 import jp.matsuura.facediary.data.model.toModel
-import jp.matsuura.facediary.enums.ChangePasswordError
-import jp.matsuura.facediary.enums.CreateUserError
-import jp.matsuura.facediary.enums.LoginError
-import jp.matsuura.facediary.enums.ResetPasswordError
+import jp.matsuura.facediary.enums.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -102,9 +99,27 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun verifyEmailToken(token: String): AuthEntity {
+    suspend fun verifyEmailToken(token: String): Response<AuthModel, VerifyEmailError> {
         return withContext(Dispatchers.IO) {
-            api.verifyToken(token = token)
+            val response = try {
+                api.verifyToken(token = token)
+            } catch (e: IOException) {
+                return@withContext Response.Error(error = VerifyEmailError.NETWORK_ERROR)
+            }
+            if (response.isSuccessful) {
+                Response.Success(response.toModel { it.toModel() })
+            } else {
+                val errorBody = response.getErrorResponse<ErrorEntity>()
+                if (errorBody == null) {
+                    throw HttpException(response)
+                } else {
+                    val errorType = when (errorBody.errorCode) {
+                        "ES03_001" -> VerifyEmailError.MAIL_NOT_VERIFIED
+                        else -> throw HttpException(response)
+                    }
+                    Response.Error(errorType)
+                }
+            }
         }
     }
 

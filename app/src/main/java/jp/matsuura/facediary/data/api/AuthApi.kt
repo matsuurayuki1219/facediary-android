@@ -19,7 +19,7 @@ interface AuthApi {
     suspend fun createUser(@Body body: SignUpRequest): Response<ApiEntity>
 
     @GET("/v1/auth/verify_email_token")
-    suspend fun verifyToken(@Query("token") token: String): AuthEntity
+    suspend fun verifyToken(@Query("token") token: String): Response<AuthEntity>
 
     @GET("/v1/auth/reset_password")
     suspend fun resetPassword(@Query("email") email: String): Response<ApiEntity>
