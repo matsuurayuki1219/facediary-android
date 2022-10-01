@@ -1,7 +1,5 @@
 package jp.matsuura.facediary.data.repositories
 
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import jp.matsuura.facediary.common.Response
 import jp.matsuura.facediary.data.api.AuthApi
 import jp.matsuura.facediary.data.api.entity.ApiEntity
@@ -14,6 +12,7 @@ import jp.matsuura.facediary.data.api.toModel
 import jp.matsuura.facediary.data.datasource.FaceDiaryPreference
 import jp.matsuura.facediary.data.model.AuthModel
 import jp.matsuura.facediary.data.model.toModel
+import jp.matsuura.facediary.enums.CreateUserError
 import jp.matsuura.facediary.enums.LoginError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -72,13 +71,33 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun createUserAccount(email: String, password: String): ApiEntity {
+    suspend fun createUserAccount(email: String, password: String): Response<Unit, CreateUserError> {
         return withContext(Dispatchers.IO) {
             val body= SignUpRequest(
                 email = email,
                 password = password,
             )
-            api.createUser(body = body)
+            val response = try {
+                api.createUser(body = body)
+            } catch (e: IOException) {
+                return@withContext Response.Error(CreateUserError.NETWORK_ERROR)
+            }
+            if (response.isSuccessful) {
+                Response.Success(Unit)
+            } else {
+                val errorBody = response.getErrorResponse<ErrorEntity>()
+                if (errorBody == null) {
+                    throw HttpException(response)
+                } else {
+                    val errorType = when (errorBody.errorCode) {
+                        "ES02_001" -> CreateUserError.EMAIL_FORMAT_ERROR
+                        "ES02_002" -> CreateUserError.PASSWORD_FORMAT_ERROR
+                        "ES02_003" -> CreateUserError.USER_ALREADY_EXIST
+                        else -> throw HttpException(response)
+                    }
+                    Response.Error(errorType)
+                }
+            }
         }
     }
 

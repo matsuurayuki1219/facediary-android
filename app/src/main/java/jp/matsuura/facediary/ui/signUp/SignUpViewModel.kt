@@ -2,17 +2,16 @@ package jp.matsuura.facediary.ui.signUp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jp.matsuura.facediary.data.api.entity.ErrorEntity
+import jp.matsuura.facediary.common.Response
 import jp.matsuura.facediary.common.extenstion.checkEmailValidation
 import jp.matsuura.facediary.common.extenstion.checkPasswordValidation
+import jp.matsuura.facediary.enums.CreateUserError
 import jp.matsuura.facediary.usecase.SignUpUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 import timber.log.Timber
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,11 +33,11 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch {
             kotlin.runCatching {
                 if (!email.checkEmailValidation()) {
-                    _event.emit(Event.ValidationMailError)
+                    _event.emit(Event.Failure(error = CreateUserError.EMAIL_FORMAT_ERROR))
                     return@launch
                 }
                 if (!password.checkPasswordValidation()) {
-                    _event.emit(Event.ValidationPasswordError)
+                    _event.emit(Event.Failure(error = CreateUserError.PASSWORD_FORMAT_ERROR))
                     return@launch
                 }
                 _uiState.value = _uiState.value.copy(
@@ -49,45 +48,33 @@ class SignUpViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(
                     isProgressVisible = false,
                 )
-                _event.emit(Event.SignUp)
+                handleResponse(response = it)
             }.onFailure {
                 Timber.d(it)
                 _uiState.value = _uiState.value.copy(
                     isProgressVisible = false,
                 )
-                handleErrorResponse(throwable = it)
+                if (it is IOException) {
+                    _event.emit(Event.NetworkError)
+                } else {
+                    _event.emit(Event.UnknownError)
+                }
             }
         }
     }
 
-    private suspend fun handleErrorResponse(throwable: Throwable) {
-        if (throwable is HttpException) {
-            val errorJsonStr: String? = throwable.response()?.errorBody()?.string()
-            val adapter = Moshi.Builder().add(KotlinJsonAdapterFactory()).build().adapter(
-                ErrorEntity::class.java)
-            val errorResponse: ErrorEntity? = adapter.fromJson(errorJsonStr)
-
-            if (errorResponse == null) {
-                _event.emit(Event.UnknownError)
-                return
+    private suspend fun handleResponse(response: Response<Unit, CreateUserError>) {
+        when (response) {
+            is Response.Success -> {
+                _event.emit(Event.Success)
             }
-
-            when (errorResponse.errorCode) {
-                "ES02_001" -> {
-                    _event.emit(Event.ValidationMailError)
-                }
-                "ES02_002" -> {
-                    _event.emit(Event.ValidationPasswordError)
-                }
-                "ES02_003" -> {
-                    _event.emit(Event.UserAlreadyExisted)
-                }
-                else -> {
-                    _event.emit(Event.UnknownError)
+            is Response.Error -> {
+                if (response.error == CreateUserError.NETWORK_ERROR) {
+                    _event.emit(Event.NetworkError)
+                } else {
+                    _event.emit(Event.Failure(error = response.error))
                 }
             }
-        } else {
-            _event.emit(Event.NetworkError)
         }
     }
 
@@ -96,10 +83,8 @@ class SignUpViewModel @Inject constructor(
     )
 
     sealed class Event {
-        object SignUp: Event()
-        object UserAlreadyExisted: Event()
-        object ValidationMailError: Event()
-        object ValidationPasswordError: Event()
+        object Success: Event()
+        data class Failure(val error: CreateUserError): Event()
         object UnknownError: Event()
         object NetworkError: Event()
     }

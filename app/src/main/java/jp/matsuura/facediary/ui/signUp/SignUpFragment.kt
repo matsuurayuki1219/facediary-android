@@ -17,6 +17,8 @@ import jp.matsuura.facediary.R
 import jp.matsuura.facediary.databinding.FragmentSingupBinding
 import jp.matsuura.facediary.common.extenstion.hideKeyboard
 import jp.matsuura.facediary.common.extenstion.showMessage
+import jp.matsuura.facediary.enums.CreateUserError
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -41,8 +43,12 @@ class SignUpFragment: Fragment(R.layout.fragment_singup) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initListener()
-        initObserver()
-        initHandler()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                initObserver(coroutineScope = this)
+                initHandler(coroutineScope = this)
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -68,23 +74,23 @@ class SignUpFragment: Fragment(R.layout.fragment_singup) {
         }
     }
 
-    private fun initObserver() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.onEach {
-                    binding.progressBar.isVisible = it.isProgressVisible
-                }.launchIn(this)
-            }
-        }
+    private fun initObserver(coroutineScope: CoroutineScope) {
+        viewModel.uiState.onEach {
+            binding.progressBar.isVisible = it.isProgressVisible
+        }.launchIn(coroutineScope)
     }
 
-    private fun initHandler() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.event.onEach {
-                    when (it) {
-                        SignUpViewModel.Event.ValidationMailError -> {
-                            context?.showMessage(
+    private fun initHandler(coroutineScope: CoroutineScope) {
+        viewModel.event.onEach {
+            when (it) {
+                is SignUpViewModel.Event.Success -> {
+                    val direction = SignUpFragmentDirections.navigateToSignUpSuccessFragment()
+                    findNavController().navigate(direction)
+                }
+                is SignUpViewModel.Event.Failure -> {
+                    when (it.error) {
+                        CreateUserError.EMAIL_FORMAT_ERROR -> {
+                            requireContext().showMessage(
                                 titleRes = R.string.validation_email_error_title,
                                 messageRes = R.string.validation_email_error_message,
                                 onPositiveClick = { dialog ->
@@ -92,8 +98,8 @@ class SignUpFragment: Fragment(R.layout.fragment_singup) {
                                 }
                             )
                         }
-                        SignUpViewModel.Event.ValidationPasswordError -> {
-                            context?.showMessage(
+                        CreateUserError.PASSWORD_FORMAT_ERROR -> {
+                            requireContext().showMessage(
                                 titleRes = R.string.validation_password_error_title,
                                 messageRes = R.string.validation_password_error_message,
                                 onPositiveClick = { dialog ->
@@ -101,30 +107,8 @@ class SignUpFragment: Fragment(R.layout.fragment_singup) {
                                 }
                             )
                         }
-                        SignUpViewModel.Event.SignUp -> {
-                            val direction = SignUpFragmentDirections.navigateToSignUpSuccessFragment()
-                            findNavController().navigate(direction)
-                        }
-                        SignUpViewModel.Event.UnknownError -> {
-                            context?.showMessage(
-                                titleRes = R.string.other_error_title,
-                                messageRes = R.string.other_error_message,
-                                onPositiveClick = { dialog ->
-                                    dialog.dismiss()
-                                }
-                            )
-                        }
-                        SignUpViewModel.Event.NetworkError -> {
-                            context?.showMessage(
-                                titleRes = R.string.network_error_title,
-                                messageRes = R.string.network_error_message,
-                                onPositiveClick = { dialog ->
-                                    dialog.dismiss()
-                                }
-                            )
-                        }
-                        SignUpViewModel.Event.UserAlreadyExisted -> {
-                            context?.showMessage(
+                        CreateUserError.USER_ALREADY_EXIST -> {
+                            requireContext().showMessage(
                                 titleRes = R.string.user_already_existed_error_title,
                                 messageRes = R.string.user_already_existed_error_message,
                                 onPositiveClick = { dialog ->
@@ -133,8 +117,26 @@ class SignUpFragment: Fragment(R.layout.fragment_singup) {
                             )
                         }
                     }
-                }.launchIn(this)
+                }
+                is SignUpViewModel.Event.UnknownError -> {
+                    requireContext().showMessage(
+                        titleRes = R.string.other_error_title,
+                        messageRes = R.string.other_error_message,
+                        onPositiveClick = { dialog ->
+                            dialog.dismiss()
+                        }
+                    )
+                }
+                is SignUpViewModel.Event.NetworkError -> {
+                    requireContext().showMessage(
+                        titleRes = R.string.network_error_title,
+                        messageRes = R.string.network_error_message,
+                        onPositiveClick = { dialog ->
+                            dialog.dismiss()
+                        }
+                    )
+                }
             }
-        }
+        }.launchIn(coroutineScope)
     }
 }
