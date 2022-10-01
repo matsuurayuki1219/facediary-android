@@ -106,6 +106,18 @@ class PasswordResetFragment: Fragment(R.layout.fragment_password_reset) {
                                 isCancel = false,
                             )
                         }
+                        else -> {
+                            requireContext().showMessage(
+                                titleRes = R.string.other_error_title,
+                                messageRes = R.string.other_error_message,
+                                positiveButtonRes = R.string.ok,
+                                onPositiveClick = { dialog ->
+                                    dialog.dismiss()
+                                    findNavController().popBackStack(R.id.signInFragment, false)
+                                },
+                                isCancel = false,
+                            )
+                        }
                     }
                 }
                 is PasswordResetViewModel.Event.NetworkError -> {
