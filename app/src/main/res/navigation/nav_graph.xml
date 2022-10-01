@@ -148,6 +148,12 @@
         android:name="jp.matsuura.facediary.ui.home.HomeFragment"
         tools:layout="@layout/fragment_home">
 
+        <action
+            android:id="@+id/navigate_to_signInFragment"
+            app:destination="@+id/signInFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="false"/>
+
     </fragment>
 
 </navigation>
