@@ -12,14 +12,20 @@
 
         <action
             android:id="@+id/navigate_to_signInFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"
             app:destination="@id/signInFragment" />
 
         <action
             android:id="@+id/navigate_to_confirmRegisterFeelingFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"
             app:destination="@id/confirmRegisterFeelingFragment" />
 
         <action
             android:id="@+id/navigate_to_homeFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"
             app:destination="@id/homeFragment" />
 
     </fragment>
