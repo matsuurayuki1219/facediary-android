@@ -56,8 +56,8 @@ class Activity : AppCompatActivity() {
                     navigateToVerifyEmail(token = token)
                 } else if (path == "/reset") {
                     val token: String = deepLink.getQueryParameter("token") ?: return@addOnSuccessListener
-                    // val email: String = deepLink.getQueryParameter("email") ?: return@addOnSuccessListener
-                    navigateToResetPassword(email = "matsuurayuki1219@gmail", token = token)
+                    val email: String = deepLink.getQueryParameter("email") ?: return@addOnSuccessListener
+                    navigateToResetPassword(email = email, token = token)
                 }
             }
             .addOnFailureListener {
