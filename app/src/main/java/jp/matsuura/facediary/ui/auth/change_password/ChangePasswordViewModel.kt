@@ -1,4 +1,4 @@
-package jp.matsuura.facediary.ui.password
+package jp.matsuura.facediary.ui.auth.change_password
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

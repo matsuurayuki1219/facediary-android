@@ -14,6 +14,7 @@ import jp.matsuura.facediary.data.model.AuthModel
 import jp.matsuura.facediary.data.model.toModel
 import jp.matsuura.facediary.enums.CreateUserError
 import jp.matsuura.facediary.enums.LoginError
+import jp.matsuura.facediary.enums.ResetPasswordError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -107,9 +108,28 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun resetPassword(email: String): ApiEntity {
+    suspend fun resetPassword(email: String): Response<Unit, ResetPasswordError> {
         return withContext(Dispatchers.IO) {
-            api.resetPassword(email = email)
+            val response = try {
+                api.resetPassword(email = email)
+            } catch (e: IOException) {
+                return@withContext Response.Error(ResetPasswordError.NETWORK_ERROR)
+            }
+            if (response.isSuccessful) {
+                Response.Success(Unit)
+            } else {
+                val errorBody = response.getErrorResponse<ErrorEntity>()
+                if (errorBody == null) {
+                    throw HttpException(response)
+                } else {
+                    val errorType = when (errorBody.errorCode) {
+                        "ES04_001" -> ResetPasswordError.EMAIL_FORMAT_ERROR
+                        "ES04_002" -> ResetPasswordError.USER_NOT_EXIST
+                        else -> throw HttpException(response)
+                    }
+                    Response.Error(errorType)
+                }
+            }
         }
     }
 

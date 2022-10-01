@@ -1,4 +1,4 @@
-package jp.matsuura.facediary.ui.signUp
+package jp.matsuura.facediary.ui.auth.signUp
 
 import android.content.Intent
 import android.os.Bundle

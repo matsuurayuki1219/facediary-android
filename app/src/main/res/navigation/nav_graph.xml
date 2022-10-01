@@ -32,7 +32,7 @@
 
     <fragment 
         android:id="@+id/signInFragment"
-        android:name="jp.matsuura.facediary.ui.signIn.SignInFragment"
+        android:name="jp.matsuura.facediary.ui.auth.signIn.SignInFragment"
         tools:layout="@layout/fragment_singin" >
 
         <action
@@ -55,7 +55,7 @@
 
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="jp.matsuura.facediary.ui.signUp.SignUpFragment"
+        android:name="jp.matsuura.facediary.ui.auth.signUp.SignUpFragment"
         tools:layout="@layout/fragment_singup">
 
         <action
@@ -66,7 +66,7 @@
 
     <fragment
         android:id="@+id/signUpSuccessFragment"
-        android:name="jp.matsuura.facediary.ui.signUp.SignUpSuccessFragment"
+        android:name="jp.matsuura.facediary.ui.auth.signUp.SignUpSuccessFragment"
         tools:layout="@layout/fragment_singup_success">
 
 
@@ -74,7 +74,7 @@
 
     <fragment
         android:id="@+id/passwordResetFragment"
-        android:name="jp.matsuura.facediary.ui.password.PasswordResetFragment"
+        android:name="jp.matsuura.facediary.ui.auth.reset_password.PasswordResetFragment"
         tools:layout="@layout/fragment_password_reset">
 
         <action
@@ -85,14 +85,14 @@
 
     <fragment
         android:id="@+id/passwordResetSuccessFragment"
-        android:name="jp.matsuura.facediary.ui.password.PasswordResetSuccessFragment"
+        android:name="jp.matsuura.facediary.ui.auth.reset_password.PasswordResetSuccessFragment"
         tools:layout="@layout/fragment_password_reset_success">
 
     </fragment>
 
     <fragment
         android:id="@+id/changePasswordFragment"
-        android:name="jp.matsuura.facediary.ui.password.ChangePasswordFragment"
+        android:name="jp.matsuura.facediary.ui.auth.change_password.ChangePasswordFragment"
         tools:layout="@layout/fragment_change_password">
 
         <argument

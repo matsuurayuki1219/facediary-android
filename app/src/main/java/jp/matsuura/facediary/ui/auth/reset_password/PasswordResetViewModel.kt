@@ -1,16 +1,15 @@
-package jp.matsuura.facediary.ui.password
+package jp.matsuura.facediary.ui.auth.reset_password
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jp.matsuura.facediary.data.api.entity.ErrorEntity
+import jp.matsuura.facediary.common.Response
 import jp.matsuura.facediary.common.extenstion.checkEmailValidation
+import jp.matsuura.facediary.enums.ResetPasswordError
 import jp.matsuura.facediary.usecase.ResetPasswordUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,7 +30,7 @@ class PasswordResetViewModel @Inject constructor(
     fun onClickResetButton(email: String) {
         viewModelScope.launch {
             if (!email.checkEmailValidation()) {
-                _event.emit(Event.ValidationMailError)
+                _event.emit(Event.Failure(error = ResetPasswordError.EMAIL_FORMAT_ERROR))
                 return@launch
             }
             kotlin.runCatching {
@@ -43,42 +42,32 @@ class PasswordResetViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(
                     isProgressVisible = false,
                 )
-                _event.emit(Event.CanReset)
+                handleResponse(response = it)
             }.onFailure {
                 _uiState.value = _uiState.value.copy(
                     isProgressVisible = false,
                 )
-                handleErrorResponse(throwable = it)
+                if (it is IOException) {
+                    _event.emit(Event.NetworkError)
+                } else {
+                    _event.emit(Event.UnknownError)
+                }
             }
         }
     }
 
-    private suspend fun handleErrorResponse(throwable: Throwable) {
-        if (throwable is HttpException) {
-            val errorJsonStr: String? = throwable.response()?.errorBody()?.string()
-            val adapter = Moshi.Builder().add(KotlinJsonAdapterFactory()).build().adapter(
-                ErrorEntity::class.java)
-            val errorResponse: ErrorEntity? = adapter.fromJson(errorJsonStr)
-
-            if (errorResponse == null) {
-                _event.emit(Event.UnknownError)
-                return
+    private suspend fun handleResponse(response: Response<Unit, ResetPasswordError>) {
+        when (response) {
+            is Response.Success -> {
+                _event.emit(Event.Success)
             }
-
-            when (errorResponse.errorCode) {
-                "ES04_001" -> {
-                    _event.emit(Event.ValidationMailError)
-                }
-                "ES04_002" -> {
-                    _event.emit(Event.NotExistAccount)
-                }
-                else -> {
-                    _event.emit(Event.UnknownError)
+            is Response.Error -> {
+                if (response.error == ResetPasswordError.NETWORK_ERROR) {
+                    _event.emit(Event.NetworkError)
+                } else {
+                    _event.emit(Event.Failure(error = response.error))
                 }
             }
-
-        } else {
-            _event.emit(Event.NetworkError)
         }
     }
 
@@ -87,9 +76,8 @@ class PasswordResetViewModel @Inject constructor(
     )
 
     sealed class Event {
-        object CanReset: Event()
-        object NotExistAccount: Event()
-        object ValidationMailError: Event()
+        object Success: Event()
+        data class Failure(val error: ResetPasswordError): Event()
         object UnknownError: Event()
         object NetworkError: Event()
     }

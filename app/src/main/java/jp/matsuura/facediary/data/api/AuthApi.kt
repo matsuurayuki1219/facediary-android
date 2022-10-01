@@ -22,7 +22,7 @@ interface AuthApi {
     suspend fun verifyToken(@Query("token") token: String): AuthEntity
 
     @GET("/v1/auth/reset_password")
-    suspend fun resetPassword(@Query("email") email: String): ApiEntity
+    suspend fun resetPassword(@Query("email") email: String): Response<ApiEntity>
 
     @POST("/v1/auth/change_password")
     suspend fun changePassword(@Body body: ChangePasswordRequest): ApiEntity

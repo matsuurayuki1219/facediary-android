@@ -1,4 +1,4 @@
-package jp.matsuura.facediary.ui.password
+package jp.matsuura.facediary.ui.auth.reset_password
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import jp.matsuura.facediary.R
 import jp.matsuura.facediary.databinding.FragmentSinginBinding
 import jp.matsuura.facediary.databinding.FragmentSingupBinding
 import jp.matsuura.facediary.databinding.FragmentSingupSuccessBinding
-import jp.matsuura.facediary.ui.signUp.SignUpViewModel
+import jp.matsuura.facediary.ui.auth.signUp.SignUpViewModel
 import kotlinx.coroutines.flow.onEach
 
 /**
