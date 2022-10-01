@@ -3,14 +3,18 @@ package jp.matsuura.facediary.ui.auth.change_password
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import jp.matsuura.facediary.data.repositories.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jp.matsuura.facediary.common.Response
+import jp.matsuura.facediary.enums.ChangePasswordError
+import jp.matsuura.facediary.usecase.ChangePasswordUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
-
+@HiltViewModel
 class ChangePasswordViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
+    private val changePassword: ChangePasswordUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -28,22 +32,42 @@ class ChangePasswordViewModel @Inject constructor(
     private val token: String = args.token
     private val email: String = args.email
 
-    fun onClickChangeButton(userId: String) {
+    fun onClickChangeButton(password: String) {
         viewModelScope.launch {
             kotlin.runCatching {
                 _uiState.value = _uiState.value.copy(
                     isProgressVisible = true,
                 )
-                authRepository.resetPassword(email = userId)
-                _event.emit(Event.CanChange)
+                changePassword(email = email, password = password, token = token)
             }.onSuccess {
                 _uiState.value = _uiState.value.copy(
                     isProgressVisible = false,
                 )
+                handleResponse(response = it)
             }.onFailure {
                 _uiState.value = _uiState.value.copy(
                     isProgressVisible = false,
                 )
+                if (it is IOException) {
+                    _event.emit(Event.NetworkError)
+                } else {
+                    _event.emit(Event.UnknownError)
+                }
+            }
+        }
+    }
+
+    private suspend fun handleResponse(response: Response<Unit, ChangePasswordError>) {
+        when (response) {
+            is Response.Success -> {
+                _event.emit(Event.Success)
+            }
+            is Response.Error -> {
+                if (response.error == ChangePasswordError.NETWORK_ERROR) {
+                    _event.emit(Event.NetworkError)
+                } else {
+                    _event.emit(Event.Failure(error = response.error))
+                }
             }
         }
     }
@@ -53,10 +77,8 @@ class ChangePasswordViewModel @Inject constructor(
     )
 
     sealed class Event {
-        object CanChange: Event()
-        object ValidationPasswordError: Event()
-        object NotExistUser: Event()
-
+        object Success: Event()
+        data class Failure(val error: ChangePasswordError): Event()
         object UnknownError: Event()
         object NetworkError: Event()
     }

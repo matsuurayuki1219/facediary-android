@@ -25,6 +25,6 @@ interface AuthApi {
     suspend fun resetPassword(@Query("email") email: String): Response<ApiEntity>
 
     @POST("/v1/auth/change_password")
-    suspend fun changePassword(@Body body: ChangePasswordRequest): ApiEntity
+    suspend fun changePassword(@Body body: ChangePasswordRequest): Response<ApiEntity>
 
 }

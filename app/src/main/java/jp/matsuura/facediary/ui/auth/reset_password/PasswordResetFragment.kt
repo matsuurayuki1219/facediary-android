@@ -84,14 +84,11 @@ class PasswordResetFragment: Fragment(R.layout.fragment_password_reset) {
                     when (it.error) {
                         ResetPasswordError.EMAIL_FORMAT_ERROR -> {
                             requireContext().showMessage(
-                                titleRes = R.string.user_not_exist_error_title,
-                                messageRes = R.string.user_not_exist_error_message,
-                                positiveButtonRes = R.string.ok,
+                                titleRes = R.string.validation_email_error_title,
+                                messageRes = R.string.validation_email_error_message,
                                 onPositiveClick = { dialog ->
                                     dialog.dismiss()
-                                    findNavController().popBackStack(R.id.signInFragment, false)
-                                },
-                                isCancel = false,
+                                }
                             )
                         }
                         ResetPasswordError.USER_NOT_EXIST -> {

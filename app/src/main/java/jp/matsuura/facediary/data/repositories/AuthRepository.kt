@@ -2,7 +2,6 @@ package jp.matsuura.facediary.data.repositories
 
 import jp.matsuura.facediary.common.Response
 import jp.matsuura.facediary.data.api.AuthApi
-import jp.matsuura.facediary.data.api.entity.ApiEntity
 import jp.matsuura.facediary.data.api.entity.AuthEntity
 import jp.matsuura.facediary.data.api.entity.ErrorEntity
 import jp.matsuura.facediary.data.api.getErrorResponse
@@ -12,6 +11,7 @@ import jp.matsuura.facediary.data.api.toModel
 import jp.matsuura.facediary.data.datasource.FaceDiaryPreference
 import jp.matsuura.facediary.data.model.AuthModel
 import jp.matsuura.facediary.data.model.toModel
+import jp.matsuura.facediary.enums.ChangePasswordError
 import jp.matsuura.facediary.enums.CreateUserError
 import jp.matsuura.facediary.enums.LoginError
 import jp.matsuura.facediary.enums.ResetPasswordError
@@ -133,14 +133,36 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun changePassword(email: String, password: String, token: String): ApiEntity {
+    suspend fun changePassword(email: String, password: String, token: String): Response<Unit, ChangePasswordError> {
         return withContext(Dispatchers.IO) {
             val request = ChangePasswordRequest(
                 email = email,
                 password = password,
                 token = token,
             )
-            api.changePassword(body = request)
+            val response = try {
+                api.changePassword(body = request)
+            } catch (e: IOException) {
+                return@withContext Response.Error(ChangePasswordError.NETWORK_ERROR)
+            }
+
+            if (response.isSuccessful) {
+                Response.Success(Unit)
+            } else {
+                val errorBody = response.getErrorResponse<ErrorEntity>()
+                if (errorBody == null) {
+                    throw HttpException(response)
+                } else {
+                    val errorType = when (errorBody.errorCode) {
+                        "ES05_001" -> ChangePasswordError.EMAIL_FORMAT_ERROR
+                        "ES05_002" -> ChangePasswordError.PASSWORD_FORMAT_ERROR
+                        "ES05_005" -> ChangePasswordError.USER_NOT_EXIST
+                        "ES05_006" -> ChangePasswordError.TOKEN_WRONG
+                        else -> throw HttpException(response)
+                    }
+                    Response.Error(errorType)
+                }
+            }
         }
     }
 

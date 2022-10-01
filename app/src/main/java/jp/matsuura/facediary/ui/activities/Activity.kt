@@ -56,8 +56,8 @@ class Activity : AppCompatActivity() {
                     navigateToVerifyEmail(token = token)
                 } else if (path == "/reset") {
                     val token: String = deepLink.getQueryParameter("token") ?: return@addOnSuccessListener
-                    val email: String = deepLink.getQueryParameter("email") ?: return@addOnSuccessListener
-                    navigateToResetPassword(email = email, token = token)
+                    // val email: String = deepLink.getQueryParameter("email") ?: return@addOnSuccessListener
+                    navigateToResetPassword(email = "matsuurayuki1219@gmail", token = token)
                 }
             }
             .addOnFailureListener {
@@ -76,8 +76,8 @@ class Activity : AppCompatActivity() {
         findNavController(R.id.nav_host_fragment).navigate(
             R.id.changePasswordFragment,
             Bundle().apply {
-                bundleOf("token" to token)
-                bundleOf("email" to email)
+                putString("token", token)
+                putString("email", email)
             }
         )
     }
