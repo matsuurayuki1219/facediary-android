@@ -6,7 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import jp.matsuura.facediary.datasource.FaceDiaryPreference
+import jp.matsuura.facediary.data.datasource.FaceDiaryPreference
 
 @Module
 @InstallIn(SingletonComponent::class)

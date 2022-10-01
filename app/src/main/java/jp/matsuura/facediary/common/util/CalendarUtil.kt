@@ -1,6 +1,6 @@
 package jp.matsuura.facediary.common.util
 
-import jp.matsuura.facediary.common.enum.Youbi
+import jp.matsuura.facediary.enums.Youbi
 
 object CalendarUtil {
 

@@ -7,20 +7,21 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import jp.matsuura.facediary.BuildConfig
 import jp.matsuura.facediary.R
 import jp.matsuura.facediary.databinding.FragmentSinginBinding
-import jp.matsuura.facediary.extenstion.hideKeyboard
-import jp.matsuura.facediary.extenstion.showMessage
+import jp.matsuura.facediary.common.extenstion.hideKeyboard
+import jp.matsuura.facediary.common.extenstion.showMessage
+import jp.matsuura.facediary.enums.LoginError
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-
-/**
- * サインイン画面
- */
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SignInFragment: Fragment(R.layout.fragment_singin) {
@@ -42,8 +43,18 @@ class SignInFragment: Fragment(R.layout.fragment_singin) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initListener()
-        initObserver()
-        initHandler()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                initObserver(coroutineScope = this)
+                initHandler(coroutineScope = this)
+            }
+        }
+
+        if (BuildConfig.DEBUG) {
+            binding.emailEditTextView.setText("test1@example.com")
+            binding.passwordEditTextView.setText("pass9999")
+        }
+
     }
 
     override fun onDestroyView() {
@@ -52,91 +63,88 @@ class SignInFragment: Fragment(R.layout.fragment_singin) {
     }
 
     private fun initListener() {
-
         binding.singInButton.setOnClickListener {
             val userId = binding.emailEditTextView.text.toString()
             val password = binding.passwordEditTextView.text.toString()
             viewModel.onClickSignInButton(email = userId, password = password)
         }
-
         binding.signUpButton.setOnClickListener {
-            viewModel.onClickSignUpButton()
+            val direction = SignInFragmentDirections.navigateToSignUpFragment()
+            findNavController().navigate(direction)
         }
-
         binding.forgetPasswordButton.setOnClickListener {
-            viewModel.onClickForgetButton()
+            val direction = SignInFragmentDirections.navigateToPasswordResetFragment()
+            findNavController().navigate(direction)
         }
-
-        if (BuildConfig.DEBUG) {
-            binding.emailEditTextView.setText("test1@example.com")
-            binding.passwordEditTextView.setText("pass9999")
-        }
-
         binding.root.setOnClickListener {
             requireActivity().hideKeyboard()
         }
     }
 
-    private fun initObserver() {
+    private fun initObserver(coroutineScope: CoroutineScope) {
         viewModel.uiState.onEach {
             binding.progressBar.isVisible = it.isProgressVisible
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }.launchIn(coroutineScope)
     }
 
-    private fun initHandler() {
+    private fun initHandler(coroutineScope: CoroutineScope) {
         viewModel.event.onEach {
             when (it) {
-                SignInViewModel.Event.ValidationMailError -> {
-                    context?.showMessage(
-                        titleRes = R.string.validation_email_error_title,
-                        messageRes = R.string.validation_email_error_message,
-                        onPositiveClick = { dialog ->
-                            dialog.dismiss()
-                        }
-                    )
-                }
-                SignInViewModel.Event.ValidationPasswordError -> {
-                    context?.showMessage(
-                        titleRes = R.string.validation_password_error_title,
-                        messageRes = R.string.validation_password_error_message,
-                        onPositiveClick = { dialog ->
-                            dialog.dismiss()
-                        }
-                    )
-                }
-                SignInViewModel.Event.MailNotVerified -> {
-                    context?.showMessage(
-                        titleRes = R.string.mail_not_verified_error_title,
-                        messageRes = R.string.mail_not_verified_error_message,
-                        onPositiveClick = { dialog ->
-                            dialog.dismiss()
-                        }
-                    )
-                }
-                SignInViewModel.Event.CanSignIn -> {
+                is SignInViewModel.Event.Success -> {
                     val direction = SignInFragmentDirections.navigateToHomeFragment()
                     findNavController().navigate(direction)
                 }
-                SignInViewModel.Event.NotExistUser -> {
-                    context?.showMessage(
-                        titleRes = R.string.user_not_exist_error_title,
-                        messageRes = R.string.user_not_exist_error_message,
-                        onPositiveClick = { dialog ->
-                            dialog.dismiss()
+                is SignInViewModel.Event.Failure -> {
+                    when (it.error) {
+                        LoginError.EMAIL_FORMAT_ERROR -> {
+                            requireContext().showMessage(
+                                titleRes = R.string.validation_email_error_title,
+                                messageRes = R.string.validation_email_error_message,
+                                onPositiveClick = { dialog ->
+                                    dialog.dismiss()
+                                }
+                            )
                         }
-                    )
-                }
-                SignInViewModel.Event.WrongPassword -> {
-                    context?.showMessage(
-                        titleRes = R.string.password_error_title,
-                        messageRes = R.string.password_error_message,
-                        onPositiveClick = { dialog ->
-                            dialog.dismiss()
+                        LoginError.PASSWORD_FORMAT_ERROR -> {
+                            requireContext().showMessage(
+                                titleRes = R.string.validation_password_error_title,
+                                messageRes = R.string.validation_password_error_message,
+                                onPositiveClick = { dialog ->
+                                    dialog.dismiss()
+                                }
+                            )
                         }
-                    )
+                        LoginError.USER_NOT_EXIST -> {
+                            requireContext().showMessage(
+                                titleRes = R.string.user_not_exist_error_title,
+                                messageRes = R.string.user_not_exist_error_message,
+                                onPositiveClick = { dialog ->
+                                    dialog.dismiss()
+                                }
+                            )
+                        }
+                        LoginError.MAIL_NOT_VERIFIED -> {
+                            requireContext().showMessage(
+                                titleRes = R.string.mail_not_verified_error_title,
+                                messageRes = R.string.mail_not_verified_error_message,
+                                onPositiveClick = { dialog ->
+                                    dialog.dismiss()
+                                }
+                            )
+                        }
+                        LoginError.PASSWORD_WRONG -> {
+                            requireContext().showMessage(
+                                titleRes = R.string.password_error_title,
+                                messageRes = R.string.password_error_message,
+                                onPositiveClick = { dialog ->
+                                    dialog.dismiss()
+                                }
+                            )
+                        }
+                    }
                 }
-                SignInViewModel.Event.UnknownError -> {
-                    context?.showMessage(
+                is SignInViewModel.Event.UnknownError -> {
+                    requireContext().showMessage(
                         titleRes = R.string.other_error_title,
                         messageRes = R.string.other_error_message,
                         onPositiveClick = { dialog ->
@@ -144,8 +152,8 @@ class SignInFragment: Fragment(R.layout.fragment_singin) {
                         }
                     )
                 }
-                SignInViewModel.Event.NetworkError -> {
-                    context?.showMessage(
+                is SignInViewModel.Event.NetworkError -> {
+                    requireContext().showMessage(
                         titleRes = R.string.network_error_title,
                         messageRes = R.string.network_error_message,
                         onPositiveClick = { dialog ->
@@ -153,16 +161,8 @@ class SignInFragment: Fragment(R.layout.fragment_singin) {
                         }
                     )
                 }
-                SignInViewModel.Event.SignUp -> {
-                    val direction = SignInFragmentDirections.navigateToSignUpFragment()
-                    findNavController().navigate(direction)
-                }
-                SignInViewModel.Event.ForgetPassword -> {
-                    val direction = SignInFragmentDirections.navigateToPasswordResetFragment()
-                    findNavController().navigate(direction)
-                }
             }
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }.launchIn(coroutineScope)
     }
 
 }

@@ -4,8 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import jp.matsuura.facediary.api.AuthApi
-import jp.matsuura.facediary.api.CalendarApi
+import jp.matsuura.facediary.data.api.AuthApi
+import jp.matsuura.facediary.data.api.CalendarApi
 import retrofit2.Retrofit
 import retrofit2.create
 

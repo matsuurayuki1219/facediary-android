@@ -3,7 +3,7 @@ package jp.matsuura.facediary.ui.splash
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jp.matsuura.facediary.repositories.AuthRepository
+import jp.matsuura.facediary.data.repositories.AuthRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject

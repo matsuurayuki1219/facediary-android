@@ -60,22 +60,6 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"/>
 
-        <FrameLayout
-            android:id="@+id/progressBar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#66000000"
-            android:visibility="invisible">
-
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminate="true"
-                app:indicatorSize="40dp" />
-
-        </FrameLayout>
-
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -147,5 +131,22 @@
         android:textSize="12sp"
         android:textColor="@color/white"
         android:textStyle="bold"/>
+
+    <FrameLayout
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66000000"
+        android:visibility="invisible"
+        tools:visibility="visible">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:indicatorSize="40dp" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

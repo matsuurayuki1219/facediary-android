@@ -10,7 +10,7 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import jp.matsuura.facediary.R
 import jp.matsuura.facediary.databinding.FragmentHomeBinding
-import jp.matsuura.facediary.extenstion.showConfirm
+import jp.matsuura.facediary.common.extenstion.showConfirm
 
 @AndroidEntryPoint
 class HomeFragment: Fragment(R.layout.fragment_home) {

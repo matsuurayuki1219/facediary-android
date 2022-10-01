@@ -7,20 +7,19 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import jp.matsuura.facediary.BuildConfig
 import jp.matsuura.facediary.R
 import jp.matsuura.facediary.databinding.FragmentSingupBinding
-import jp.matsuura.facediary.extenstion.hideKeyboard
-import jp.matsuura.facediary.extenstion.showMessage
+import jp.matsuura.facediary.common.extenstion.hideKeyboard
+import jp.matsuura.facediary.common.extenstion.showMessage
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-
-/**
- * サインアップ画面
- */
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SignUpFragment: Fragment(R.layout.fragment_singup) {
@@ -64,70 +63,78 @@ class SignUpFragment: Fragment(R.layout.fragment_singup) {
         }
 
         if (BuildConfig.DEBUG) {
-            binding.emailEditTextView.setText("test1+1@example.com")
+            binding.emailEditTextView.setText("yuki.matsuura@progrit.co.jp")
             binding.passwordEditTextView.setText("pass9999")
         }
     }
 
     private fun initObserver() {
-        viewModel.uiState.onEach {
-            binding.progressBar.isVisible = it.isProgressVisible
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.onEach {
+                    binding.progressBar.isVisible = it.isProgressVisible
+                }.launchIn(this)
+            }
+        }
     }
 
     private fun initHandler() {
-        viewModel.event.onEach {
-            when (it) {
-                SignUpViewModel.Event.ValidationMailError -> {
-                    context?.showMessage(
-                        titleRes = R.string.validation_email_error_title,
-                        messageRes = R.string.validation_email_error_message,
-                        onPositiveClick = { dialog ->
-                            dialog.dismiss()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.event.onEach {
+                    when (it) {
+                        SignUpViewModel.Event.ValidationMailError -> {
+                            context?.showMessage(
+                                titleRes = R.string.validation_email_error_title,
+                                messageRes = R.string.validation_email_error_message,
+                                onPositiveClick = { dialog ->
+                                    dialog.dismiss()
+                                }
+                            )
                         }
-                    )
-                }
-                SignUpViewModel.Event.ValidationPasswordError -> {
-                    context?.showMessage(
-                        titleRes = R.string.validation_password_error_title,
-                        messageRes = R.string.validation_password_error_message,
-                        onPositiveClick = { dialog ->
-                            dialog.dismiss()
+                        SignUpViewModel.Event.ValidationPasswordError -> {
+                            context?.showMessage(
+                                titleRes = R.string.validation_password_error_title,
+                                messageRes = R.string.validation_password_error_message,
+                                onPositiveClick = { dialog ->
+                                    dialog.dismiss()
+                                }
+                            )
                         }
-                    )
-                }
-                SignUpViewModel.Event.SignUp -> {
-                    val direction = SignUpFragmentDirections.navigateToSignUpSuccessFragment()
-                    findNavController().navigate(direction)
-                }
-                SignUpViewModel.Event.UnknownError -> {
-                    context?.showMessage(
-                        titleRes = R.string.other_error_title,
-                        messageRes = R.string.other_error_message,
-                        onPositiveClick = { dialog ->
-                            dialog.dismiss()
+                        SignUpViewModel.Event.SignUp -> {
+                            val direction = SignUpFragmentDirections.navigateToSignUpSuccessFragment()
+                            findNavController().navigate(direction)
                         }
-                    )
-                }
-                SignUpViewModel.Event.NetworkError -> {
-                    context?.showMessage(
-                        titleRes = R.string.network_error_title,
-                        messageRes = R.string.network_error_message,
-                        onPositiveClick = { dialog ->
-                            dialog.dismiss()
+                        SignUpViewModel.Event.UnknownError -> {
+                            context?.showMessage(
+                                titleRes = R.string.other_error_title,
+                                messageRes = R.string.other_error_message,
+                                onPositiveClick = { dialog ->
+                                    dialog.dismiss()
+                                }
+                            )
                         }
-                    )
-                }
-                SignUpViewModel.Event.UserAlreadyExisted -> {
-                    context?.showMessage(
-                        titleRes = R.string.user_already_existed_error_title,
-                        messageRes = R.string.user_already_existed_error_message,
-                        onPositiveClick = { dialog ->
-                            dialog.dismiss()
+                        SignUpViewModel.Event.NetworkError -> {
+                            context?.showMessage(
+                                titleRes = R.string.network_error_title,
+                                messageRes = R.string.network_error_message,
+                                onPositiveClick = { dialog ->
+                                    dialog.dismiss()
+                                }
+                            )
                         }
-                    )
-                }
+                        SignUpViewModel.Event.UserAlreadyExisted -> {
+                            context?.showMessage(
+                                titleRes = R.string.user_already_existed_error_title,
+                                messageRes = R.string.user_already_existed_error_message,
+                                onPositiveClick = { dialog ->
+                                    dialog.dismiss()
+                                }
+                            )
+                        }
+                    }
+                }.launchIn(this)
             }
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }
     }
 }

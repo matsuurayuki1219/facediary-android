@@ -22,7 +22,6 @@
             android:id="@+id/navigate_to_homeFragment"
             app:destination="@id/homeFragment" />
 
-
     </fragment>
 
     <fragment 
@@ -86,13 +85,21 @@
     </fragment>
 
     <fragment
-        android:id="@+id/passwordSettingFragment"
-        android:name="jp.matsuura.facediary.ui.password.PasswordSettingFragment"
-        tools:layout="@layout/fragment_password_setting">
+        android:id="@+id/changePasswordFragment"
+        android:name="jp.matsuura.facediary.ui.password.ChangePasswordFragment"
+        tools:layout="@layout/fragment_change_password">
+
+        <argument
+            android:name="email"
+            app:argType="string" />
+
+        <argument
+            android:name="token"
+            app:argType="string" />
 
         <action
-            android:id="@+id/navigate_to_confirmRegisterFeelingFragment"
-            app:destination="@+id/confirmRegisterFeelingFragment"/>
+            android:id="@+id/navigate_to_homeFragment"
+            app:destination="@+id/homeFragment"/>
 
     </fragment>
 
@@ -112,6 +119,21 @@
         android:id="@+id/registerFeelingFragment"
         android:name="jp.matsuura.facediary.ui.register.RegisterFeelingFragment"
         tools:layout="@layout/fragment_register_feeling">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/verifyEmailFragment"
+        android:name="jp.matsuura.facediary.ui.verify.VerifyEmailFragment"
+        tools:layout="@layout/fragment_verify_email">
+
+        <argument
+            android:name="token"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/navigate_to_homeFragment"
+            app:destination="@+id/homeFragment"/>
 
     </fragment>
 

@@ -5,11 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jp.matsuura.facediary.api.entity.ErrorResponse
-import jp.matsuura.facediary.extenstion.checkEmailValidation
-import jp.matsuura.facediary.extenstion.checkPasswordValidation
-import jp.matsuura.facediary.repositories.AuthRepository
-import jp.matsuura.facediary.common.Constant
+import jp.matsuura.facediary.data.api.entity.ErrorEntity
+import jp.matsuura.facediary.common.extenstion.checkEmailValidation
+import jp.matsuura.facediary.common.extenstion.checkPasswordValidation
+import jp.matsuura.facediary.usecase.SignUpUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -18,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
+    private val signUp: SignUpUseCase,
 ): ViewModel() {
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(
@@ -31,25 +30,21 @@ class SignUpViewModel @Inject constructor(
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow<Event>()
     val event: SharedFlow<Event> = _event.asSharedFlow()
 
-
     fun onClickSignUpButton(email: String, password: String) {
         viewModelScope.launch {
             kotlin.runCatching {
-
                 if (!email.checkEmailValidation()) {
                     _event.emit(Event.ValidationMailError)
                     return@launch
                 }
-
                 if (!password.checkPasswordValidation()) {
                     _event.emit(Event.ValidationPasswordError)
                     return@launch
                 }
-
                 _uiState.value = _uiState.value.copy(
                     isProgressVisible = true,
                 )
-                authRepository.createUserAccount(email, password)
+                signUp(email = email, password = password)
             }.onSuccess {
                 _uiState.value = _uiState.value.copy(
                     isProgressVisible = false,
@@ -60,29 +55,39 @@ class SignUpViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(
                     isProgressVisible = false,
                 )
+                handleErrorResponse(throwable = it)
+            }
+        }
+    }
 
-                if (it is HttpException) {
-                    val errorJsonStr: String? = it.response()?.errorBody()?.string()
-                    val adapter = Moshi.Builder().add(KotlinJsonAdapterFactory()).build().adapter(ErrorResponse::class.java)
-                    val errorResponse: ErrorResponse? = adapter.fromJson(errorJsonStr)
+    private suspend fun handleErrorResponse(throwable: Throwable) {
+        if (throwable is HttpException) {
+            val errorJsonStr: String? = throwable.response()?.errorBody()?.string()
+            val adapter = Moshi.Builder().add(KotlinJsonAdapterFactory()).build().adapter(
+                ErrorEntity::class.java)
+            val errorResponse: ErrorEntity? = adapter.fromJson(errorJsonStr)
 
-                    if (errorResponse == null) {
-                        _event.emit(Event.UnknownError)
-                        return@onFailure
-                    }
+            if (errorResponse == null) {
+                _event.emit(Event.UnknownError)
+                return
+            }
 
-                    when (errorResponse.errorCode) {
-                        Constant.USER_ALREADY_EXISTED -> {
-                            _event.emit(Event.UserAlreadyExisted)
-                        }
-                        else -> {
-                            _event.emit(Event.UnknownError)
-                        }
-                    }
-                } else {
-                    _event.emit(Event.NetworkError)
+            when (errorResponse.errorCode) {
+                "ES02_001" -> {
+                    _event.emit(Event.ValidationMailError)
+                }
+                "ES02_002" -> {
+                    _event.emit(Event.ValidationPasswordError)
+                }
+                "ES02_003" -> {
+                    _event.emit(Event.UserAlreadyExisted)
+                }
+                else -> {
+                    _event.emit(Event.UnknownError)
                 }
             }
+        } else {
+            _event.emit(Event.NetworkError)
         }
     }
 

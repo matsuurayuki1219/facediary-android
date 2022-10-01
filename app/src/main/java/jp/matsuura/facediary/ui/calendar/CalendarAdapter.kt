@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import jp.matsuura.facediary.databinding.ItemContentsBinding
 import jp.matsuura.facediary.databinding.ItemHeaderBinding
-import jp.matsuura.facediary.extenstion.BaseViewHolder
-import jp.matsuura.facediary.extenstion.dpToPx
+import jp.matsuura.facediary.common.extenstion.BaseViewHolder
+import jp.matsuura.facediary.common.extenstion.dpToPx
 
 class CalendarAdapter(val onItemClick: ((Int) -> Unit)): RecyclerView.Adapter<BaseViewHolder>() {
 

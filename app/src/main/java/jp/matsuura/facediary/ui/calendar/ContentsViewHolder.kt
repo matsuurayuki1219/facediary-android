@@ -4,8 +4,8 @@ import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import jp.matsuura.facediary.R
 import jp.matsuura.facediary.databinding.ItemContentsBinding
-import jp.matsuura.facediary.common.enum.Youbi
-import jp.matsuura.facediary.extenstion.BaseViewHolder
+import jp.matsuura.facediary.enums.Youbi
+import jp.matsuura.facediary.common.extenstion.BaseViewHolder
 
 class ContentsViewHolder(private val binding: ItemContentsBinding, val onItemClick: ((Int) -> Unit)): BaseViewHolder(binding.root) {
 

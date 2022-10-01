@@ -5,6 +5,7 @@
     <string name="email">メールアドレス</string>
     <string name="password">パスワード</string>
     <string name="send">送信</string>
+    <string name="retry">再試行</string>
     <string name="ok">OK</string>
     <string name="cancel">CANCEL</string>
     <string name="logout">ログアウト</string>
@@ -13,7 +14,7 @@
     <string name="validation_password_error_title">パスワード不正</string>
     <string name="validation_password_error_message">パスワードを正しい形式で入力してください。</string>
     <string name="other_error_title">エラー</string>
-    <string name="other_error_message">エラーが発生しました。再度お試しください。</string>
+    <string name="other_error_message">エラーが発生しました。</string>
     <string name="network_error_title">通信エラー</string>
     <string name="network_error_message">通信エラーが発生しました。再度お試しください。</string>
     <string name="user_not_exist_error_title">ユーザが存在しません</string>
@@ -44,6 +45,12 @@
     <string name="password_reset_message">パスワードをリセットします。\nメールアドレスを入力してください。</string>
     <string name="password_reset_success_message">メールフォルダを確認し、\nパスワード変更の手続きを行ってください。</string>
     <string name="password_setting_message">設定するパスワードを入力してください。</string>
+
+    <!-- verify email -->
+    <string name="verify_email_dialog_title_success">ユーザ登録完了</string>
+    <string name="verify_email_dialog_message_success">ユーザ登録が完了いたしました。</string>
+    <string name="verify_email_dialog_title_not_verify_token">メール認証失敗</string>
+    <string name="verify_email_dialog_message_not_verify_token">メール認証に失敗しました。再度ユーザ登録を行ってください。</string>
 
     <!-- Dummy -->
     <string name="dummy">テストです</string>
