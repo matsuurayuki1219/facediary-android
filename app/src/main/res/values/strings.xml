@@ -40,11 +40,13 @@
 
     <!-- signUpSuccess -->
     <string name="signup_success_message">まだ登録が完了していません。\nメールフォルダを確認し、\n登録手続きを完了させてください。</string>
+    <string name="signup_success_button">メールフォルダを確認する</string>
 
     <!-- password -->
     <string name="password_reset_message">パスワードをリセットします。\nメールアドレスを入力してください。</string>
     <string name="password_reset_success_message">メールフォルダを確認し、\nパスワード変更の手続きを行ってください。</string>
     <string name="password_setting_message">設定するパスワードを入力してください。</string>
+    <string name="password_reset_success_button">メールフォルダを確認する</string>
 
     <!-- verify email -->
     <string name="verify_email_dialog_title_success">ユーザ登録完了</string>
