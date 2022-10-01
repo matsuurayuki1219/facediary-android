@@ -49,7 +49,9 @@
 
         <action
             android:id="@+id/navigate_to_homeFragment"
-            app:destination="@+id/homeFragment"/>
+            app:destination="@+id/homeFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="false"/>
 
     </fragment>
 
@@ -105,7 +107,9 @@
 
         <action
             android:id="@+id/navigate_to_homeFragment"
-            app:destination="@+id/homeFragment"/>
+            app:destination="@+id/homeFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="false"/>
 
     </fragment>
 
@@ -139,7 +143,9 @@
 
         <action
             android:id="@+id/navigate_to_homeFragment"
-            app:destination="@+id/homeFragment"/>
+            app:destination="@+id/homeFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="false"/>
 
     </fragment>
 
