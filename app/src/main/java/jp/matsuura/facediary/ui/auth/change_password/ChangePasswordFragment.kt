@@ -72,7 +72,18 @@ class ChangePasswordFragment: Fragment(R.layout.fragment_change_password) {
     private fun initHandler(coroutineScope: CoroutineScope) {
         viewModel.event.onEach {
             when(it) {
-                is ChangePasswordViewModel.Event.Success -> {}
+                is ChangePasswordViewModel.Event.Success -> {
+                    requireContext().showMessage(
+                        titleRes = R.string.password_change_success_title,
+                        messageRes = R.string.password_change_success_message,
+                        onPositiveClick = { dialog ->
+                            dialog.dismiss()
+                            findNavController().navigate(
+                                ChangePasswordFragmentDirections.navigateToHomeFragment()
+                            )
+                        }
+                    )
+                }
                 is ChangePasswordViewModel.Event.Failure -> {
                     when (it.error) {
                         ChangePasswordError.EMAIL_FORMAT_ERROR -> {
