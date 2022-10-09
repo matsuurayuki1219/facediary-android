@@ -14,10 +14,7 @@ import java.io.InputStream
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterFeelingViewModel @Inject constructor(
-    private val calculateEmotion: CalculateEmotionUseCase,
-    private val cacheDir: CacheDir,
-) : ViewModel() {
+class RegisterFeelingViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(
         UiState(
