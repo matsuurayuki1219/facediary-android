@@ -61,6 +61,7 @@ class ShootCameraFragment : Fragment(R.layout.fragment_shoot_camera) {
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val bitmap = result.data?.extras?.get("data") as Bitmap
+            viewModel.onCameraFinish(bitmap = bitmap)
         }
     }
 

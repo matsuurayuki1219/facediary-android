@@ -16,4 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ShootCameraViewModel @Inject constructor() : ViewModel() {
 
+
+    fun onCameraFinish(bitmap: Bitmap) {
+
+    }
 }

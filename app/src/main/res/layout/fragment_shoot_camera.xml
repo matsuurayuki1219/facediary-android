@@ -7,6 +7,20 @@
     tools:context=".ui.register.RegisterFeelingFragment"
     android:background="#3949ab">
 
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginHorizontal="16dp"
+        android:textAlignment="center"
+        android:text="セルフィーを撮影してください。"
+        android:textSize="16sp"
+        android:textColor="@color/white"/>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/shootButton"
         android:layout_width="match_parent"

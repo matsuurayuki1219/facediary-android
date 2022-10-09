@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
+    id "com.starter.easylauncher" version "5.1.2"
 }
 
 android {
@@ -25,10 +26,18 @@ android {
     }
 
     buildTypes {
+
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            applicationIdSuffix ".debug"
+            minifyEnabled false
+            debuggable true
+        }
+
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -40,6 +49,14 @@ android {
 
     viewBinding {
         enabled = true
+    }
+}
+
+easylauncher {
+    buildTypes {
+        debug {
+            filters = redRibbonFilter()
+        }
     }
 }
 

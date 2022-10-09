@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "436337026310",
+    "project_id": "facediary-debug",
+    "storage_bucket": "facediary-debug.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436337026310:android:2fdb070c3264a89135aa87",
+        "android_client_info": {
+          "package_name": "jp.matsuura.facediary.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "436337026310-1uj49b59mus5ss62h5jimjboah1r76r2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxPPRUVgjJ9EeJv6JI9dyLyOOzyde8v9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "436337026310-1uj49b59mus5ss62h5jimjboah1r76r2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
