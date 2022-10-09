@@ -27,9 +27,14 @@ data class FaceAttributeModel (
     val exposure: ExposureModel,
     val noise: NoiseModel,
     val makeup: MakeUpModel,
-    val accessories: List<String>,
+    val accessories: List<AccessoriesModel>,
     val occlusion: OcclusionModel,
     val hair: HairModel,
+)
+
+data class AccessoriesModel (
+    val type: String,
+    val confidence: Double,
 )
 
 data class HeadPoseModel (
@@ -117,9 +122,15 @@ fun FaceAttributeEntity.toModel() = FaceAttributeModel(
     exposure = exposure.toModel(),
     noise = noise.toModel(),
     makeup = makeup.toModel(),
-    accessories = accessories,
+    accessories = accessories.map { it.toModel() },
     occlusion = occlusion.toModel(),
     hair = hair.toModel(),
+)
+
+
+fun AccessoriesEntity.toModel() = AccessoriesModel (
+    type = type,
+    confidence = confidence,
 )
 
 fun HeadPoseEntity.toModel() = HeadPoseModel(

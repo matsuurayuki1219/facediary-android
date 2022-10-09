@@ -31,9 +31,15 @@ data class FaceAttributeEntity (
     val exposure: ExposureEntity,
     val noise: NoiseEntity,
     val makeup: MakeUpEntity,
-    val accessories: List<String>,
+    val accessories: List<AccessoriesEntity>,
     val occlusion: OcclusionEntity,
     val hair: HairEntity,
+)
+
+@JsonClass(generateAdapter = true)
+data class AccessoriesEntity (
+    val type: String,
+    val confidence: Double,
 )
 
 @JsonClass(generateAdapter = true)
