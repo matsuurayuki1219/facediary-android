@@ -27,11 +27,7 @@ class AuthRepository @Inject constructor(
 
     suspend fun login(email: String, password: String): Response<AuthModel, LoginError> {
         return withContext(Dispatchers.IO) {
-            val response = try {
-                api.login(email = email, password = password)
-            } catch (e: IOException) {
-                return@withContext Response.Error(LoginError.NETWORK_ERROR)
-            }
+            val response = api.login(email = email, password = password)
             if (response.isSuccessful) {
                 Response.Success(response.toModel { it.toModel() })
             } else {
@@ -75,11 +71,7 @@ class AuthRepository @Inject constructor(
                 email = email,
                 password = password,
             )
-            val response = try {
-                api.createUser(body = body)
-            } catch (e: IOException) {
-                return@withContext Response.Error(CreateUserError.NETWORK_ERROR)
-            }
+            val response = api.createUser(body = body)
             if (response.isSuccessful) {
                 Response.Success(Unit)
             } else {
@@ -101,11 +93,7 @@ class AuthRepository @Inject constructor(
 
     suspend fun verifyEmailToken(token: String): Response<AuthModel, VerifyEmailError> {
         return withContext(Dispatchers.IO) {
-            val response = try {
-                api.verifyToken(token = token)
-            } catch (e: IOException) {
-                return@withContext Response.Error(error = VerifyEmailError.NETWORK_ERROR)
-            }
+            val response = api.verifyToken(token = token)
             if (response.isSuccessful) {
                 Response.Success(response.toModel { it.toModel() })
             } else {
@@ -125,11 +113,7 @@ class AuthRepository @Inject constructor(
 
     suspend fun resetPassword(email: String): Response<Unit, ResetPasswordError> {
         return withContext(Dispatchers.IO) {
-            val response = try {
-                api.resetPassword(email = email)
-            } catch (e: IOException) {
-                return@withContext Response.Error(ResetPasswordError.NETWORK_ERROR)
-            }
+            val response = api.resetPassword(email = email)
             if (response.isSuccessful) {
                 Response.Success(Unit)
             } else {
@@ -155,12 +139,7 @@ class AuthRepository @Inject constructor(
                 password = password,
                 token = token,
             )
-            val response = try {
-                api.changePassword(body = request)
-            } catch (e: IOException) {
-                return@withContext Response.Error(ChangePasswordError.NETWORK_ERROR)
-            }
-
+            val response = api.changePassword(body = request)
             if (response.isSuccessful) {
                 Response.Success(Unit)
             } else {

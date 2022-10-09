@@ -6,5 +6,4 @@ enum class LoginError {
     USER_NOT_EXIST,
     MAIL_NOT_VERIFIED,
     PASSWORD_WRONG,
-    NETWORK_ERROR,
 }

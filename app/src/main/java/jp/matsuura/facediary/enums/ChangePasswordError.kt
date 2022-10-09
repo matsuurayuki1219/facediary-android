@@ -5,5 +5,4 @@ enum class ChangePasswordError {
     PASSWORD_FORMAT_ERROR,
     USER_NOT_EXIST,
     TOKEN_WRONG,
-    NETWORK_ERROR,
 }

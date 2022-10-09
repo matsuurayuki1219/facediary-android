@@ -75,11 +75,7 @@ class SignInViewModel @Inject constructor(
                 _event.emit(Event.Success)
             }
             is Response.Error -> {
-                if (response.error == LoginError.NETWORK_ERROR) {
-                    _event.emit(Event.NetworkError)
-                } else {
-                    _event.emit(Event.Failure(error = response.error))
-                }
+                _event.emit(Event.Failure(error = response.error))
             }
         }
     }

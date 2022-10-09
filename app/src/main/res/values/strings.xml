@@ -73,6 +73,13 @@
     <string name="register_feeling_dialog_camera_confirm_positive_button">登録</string>
     <string name="register_feeling_dialog_camera_confirm_negative_button">キャンセル</string>
 
+    <!-- shoot camera -->
+    <string name="shoot_camera_dialog_title_no_people">再撮影をしてください</string>
+    <string name="shoot_camera_dialog_message_no_people">撮影画像に人が存在しません。再度撮影してください。</string>
+
+    <string name="shoot_camera_dialog_title_many_people">再撮影をしてください</string>
+    <string name="shoot_camera_dialog_message_many_people">撮影画像に2名以上の人が存在します。再度撮影してください。</string>
+
     <!-- Dummy -->
     <string name="dummy">テストです</string>
 
