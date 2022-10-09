@@ -20,6 +20,8 @@ android {
 
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "FACEAPI_SUBSCRIPTION_KEY", "\"${project.properties['FACEAPI_SUBSCRIPTION_KEY']}\"")
     }
 
     buildTypes {

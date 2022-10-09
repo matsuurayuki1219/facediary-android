@@ -3,11 +3,6 @@ package jp.matsuura.facediary.common
 object Constant {
 
     const val BASE_URL: String = "https://facediary-api.herokuapp.com"
-
-    const val CONTENT_TYPE_KEY: String = "Content-Type"
-    const val CONTENT_TYPE_VALUE: String = "application/json"
-
-
     // ErrorCode
 
     // Common //

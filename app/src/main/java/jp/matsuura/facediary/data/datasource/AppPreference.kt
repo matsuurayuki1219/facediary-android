@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 
-class FaceDiaryPreference(context: Context) {
+class AppPreference(context: Context) {
 
     companion object {
         private const val PREFERENCE_NAME: String = "facediary"

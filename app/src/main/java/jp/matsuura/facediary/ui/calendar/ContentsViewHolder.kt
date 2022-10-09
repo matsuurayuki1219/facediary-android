@@ -5,7 +5,7 @@ import androidx.core.content.ContextCompat
 import jp.matsuura.facediary.R
 import jp.matsuura.facediary.databinding.ItemContentsBinding
 import jp.matsuura.facediary.enums.Youbi
-import jp.matsuura.facediary.common.extenstion.BaseViewHolder
+import jp.matsuura.facediary.common.BaseViewHolder
 
 class ContentsViewHolder(private val binding: ItemContentsBinding, val onItemClick: ((Int) -> Unit)): BaseViewHolder(binding.root) {
 

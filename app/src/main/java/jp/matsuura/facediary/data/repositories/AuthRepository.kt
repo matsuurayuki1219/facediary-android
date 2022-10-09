@@ -8,7 +8,7 @@ import jp.matsuura.facediary.data.api.getErrorResponse
 import jp.matsuura.facediary.data.api.request.ChangePasswordRequest
 import jp.matsuura.facediary.data.api.request.SignUpRequest
 import jp.matsuura.facediary.data.api.toModel
-import jp.matsuura.facediary.data.datasource.FaceDiaryPreference
+import jp.matsuura.facediary.data.datasource.AppPreference
 import jp.matsuura.facediary.data.model.AuthModel
 import jp.matsuura.facediary.data.model.toModel
 import jp.matsuura.facediary.enums.*
@@ -22,7 +22,7 @@ import javax.inject.Singleton
 @Singleton
 class AuthRepository @Inject constructor(
     private val api: AuthApi,
-    private val preference: FaceDiaryPreference,
+    private val preference: AppPreference,
 ) {
 
     suspend fun login(email: String, password: String): Response<AuthModel, LoginError> {

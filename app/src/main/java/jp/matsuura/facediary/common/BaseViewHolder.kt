@@ -1,4 +1,4 @@
-package jp.matsuura.facediary.common.extenstion
+package jp.matsuura.facediary.common
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

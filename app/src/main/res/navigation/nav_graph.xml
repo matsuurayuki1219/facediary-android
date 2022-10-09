@@ -130,6 +130,22 @@
         android:name="jp.matsuura.facediary.ui.register.RegisterFeelingFragment"
         tools:layout="@layout/fragment_register_feeling">
 
+        <action
+            android:id="@+id/navigate_to_shootCameraFragment"
+            app:destination="@+id/shootCameraFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/shootCameraFragment"
+        android:name="jp.matsuura.facediary.ui.register.ShootCameraFragment"
+        tools:layout="@layout/fragment_shoot_camera">
+
+        <argument
+            android:name="selectedItem"
+            app:argType="string"
+            android:defaultValue=""/>
+
     </fragment>
 
     <fragment
@@ -159,6 +175,10 @@
             app:destination="@+id/signInFragment"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="false"/>
+
+        <action
+            android:id="@+id/navigate_to_registerFeelingFragment"
+            app:destination="@+id/registerFeelingFragment"/>
 
     </fragment>
 

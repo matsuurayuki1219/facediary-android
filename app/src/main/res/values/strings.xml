@@ -24,7 +24,6 @@
     <string name="user_already_existed_error_title">ユーザが既に存在しています</string>
     <string name="user_already_existed_error_message">入力したメールアドレスは、既に登録済みです。</string>
 
-
     <string name="password_error_title">パスワード不正</string>
     <string name="password_error_message">パスワードが間違っております。入力したパスワードを再度ご確認ください。</string>
 
@@ -38,15 +37,17 @@
     <string name="signup_button">登録</string>
     <string name="signup_message">登録するメールアドレスと\nパスワードを入力してください。</string>
 
-    <!-- signUpSuccess -->
+    <!-- signUp success -->
     <string name="signup_success_message">まだ登録が完了していません。\nメールフォルダを確認し、\n登録手続きを完了させてください。</string>
     <string name="signup_success_button">メールフォルダを確認する</string>
 
-    <!-- password -->
+    <!-- change password -->
     <string name="password_reset_message">パスワードをリセットします。\nメールアドレスを入力してください。</string>
     <string name="password_reset_success_message">メールフォルダを確認し、\nパスワード変更の手続きを行ってください。</string>
-    <string name="password_setting_message">設定するパスワードを入力してください。</string>
     <string name="password_reset_success_button">メールフォルダを確認する</string>
+
+    <!-- reset password -->
+    <string name="password_change_message">設定するパスワードを入力してください。</string>
     <string name="password_change_success_title">リセット完了</string>
     <string name="password_change_success_message">パスワードリセットが完了しました。</string>
 
@@ -55,6 +56,22 @@
     <string name="verify_email_dialog_message_success">ユーザ登録が完了いたしました。</string>
     <string name="verify_email_dialog_title_not_verify_token">メール認証失敗</string>
     <string name="verify_email_dialog_message_not_verify_token">メール認証に失敗しました。再度ユーザ登録を行ってください。</string>
+
+    <!-- home -->
+    <string name="home_dialog_register_diary_title">日記登録</string>
+    <string name="home_dialog_register_diary_message">本日の感情を日記に登録しますか？</string>
+    <string name="home_dialog_register_diary_positive_button">登録</string>
+    <string name="home_dialog_register_diary_negative_button">キャンセル</string>
+
+    <!-- register feeling -->
+    <string name="register_feeling_dialog_camera_error_title">カメラ起動失敗</string>
+    <string name="register_feeling_dialog_camera_error_message">カメラの起動に失敗しました。設定を確認し、カメラを許可してください。</string>
+    <string name="register_feeling_dialog_camera_error_positive_button">設定画面へ</string>
+    <string name="register_feeling_dialog_camera_error_negative_button">キャンセル</string>
+    <string name="register_feeling_dialog_camera_confirm_title">登録</string>
+    <string name="register_feeling_dialog_camera_confirm_message">本日の気持ちを登録しますか？</string>
+    <string name="register_feeling_dialog_camera_confirm_positive_button">登録</string>
+    <string name="register_feeling_dialog_camera_confirm_negative_button">キャンセル</string>
 
     <!-- Dummy -->
     <string name="dummy">テストです</string>

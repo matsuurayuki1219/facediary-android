@@ -80,12 +80,15 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
     private fun showConfirmMessage() {
         requireContext().showConfirm(
-            titleRes = R.string.dummy,
-            messageRes = R.string.dummy,
-            positiveButtonRes = R.string.dummy,
-            negativeButtonRes = R.string.dummy,
+            titleRes = R.string.home_dialog_register_diary_title,
+            messageRes = R.string.home_dialog_register_diary_message,
+            positiveButtonRes = R.string.home_dialog_register_diary_positive_button,
+            negativeButtonRes = R.string.home_dialog_register_diary_negative_button,
             onPositiveClick = { alertDialog ->
                 alertDialog.dismiss()
+                findNavController().navigate(
+                    HomeFragmentDirections.navigateToRegisterFeelingFragment()
+                )
             },
             onNegativeClick = { alertDialog ->
                 alertDialog.dismiss()

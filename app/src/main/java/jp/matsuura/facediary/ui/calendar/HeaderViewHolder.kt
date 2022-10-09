@@ -4,7 +4,7 @@ import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import jp.matsuura.facediary.R
 import jp.matsuura.facediary.databinding.ItemHeaderBinding
-import jp.matsuura.facediary.common.extenstion.BaseViewHolder
+import jp.matsuura.facediary.common.BaseViewHolder
 
 class HeaderViewHolder(private val binding: ItemHeaderBinding): BaseViewHolder(binding.root) {
 
